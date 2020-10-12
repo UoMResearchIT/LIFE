@@ -553,7 +553,7 @@ FEMBodyClass::FEMBodyClass(IBMBodyClass *iBodyPtr, const array<double, dims> &po
 		element.emplace_back(this, i, geom, angle, L0 / numElements, rho, E);
 
 	// Get number of IBM and FEM nodes
-	int nIBMNodes = static_cast<int>(iPtr->node.size());
+	int nIBMNodes = static_cast<int>(listener->numNodes());
 	int nFEMNodes = static_cast<int>(node.size());
 
 	// Compute IBM-FEM conforming parameters

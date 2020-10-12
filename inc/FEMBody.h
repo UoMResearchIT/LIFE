@@ -35,6 +35,7 @@ public:
 	virtual int bodyID() = 0;
 	virtual void setNodePosition(int i, array<double, dims> pos) = 0;
 	virtual void setNodeVelocity(int i, array<double, dims> vel) = 0;
+	virtual int numNodes() = 0;
 };
 
 // FEM body class

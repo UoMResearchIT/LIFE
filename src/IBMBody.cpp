@@ -163,3 +163,8 @@ void IBMBodyClass::setNodeVelocity(int i, array<double, dims> vel)
 {
 	node[i]->vel = vel;
 };
+
+int IBMBodyClass::numNodes()
+{
+	return node.size();
+};

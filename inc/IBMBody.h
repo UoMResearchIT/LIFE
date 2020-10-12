@@ -60,6 +60,7 @@ public:
 	int bodyID();
 	void setNodePosition(int i, array<double, dims> pos);
 	void setNodeVelocity(int i, array<double, dims> vel);
+	int numNodes();
 
 	// Private members
 private:
