@@ -30,10 +30,12 @@ do
 	cp $casePath/params.h ../inc/params.h
 
 	# Modifiy the write out frequencies for testing
-	sed -i "/const int nSteps/c\const int nSteps = 500;" ../inc/params.h
-	sed -i "/const int tinfo/c\const int tinfo = nSteps / 50;" ../inc/params.h
-	sed -i "/const int tVTK/c\const int tVTK = nSteps / 10;" ../inc/params.h
-	sed -i "/const int tRestart/c\const int tRestart = nSteps / 5;" ../inc/params.h
+	sed -i.bak "s|const int nSteps.*|const int nSteps = 500;|" ../inc/params.h
+	sed -i.bak "s|const int tinfo.*|const int tinfo = nSteps / 50;|" ../inc/params.h
+	sed -i.bak "s|const int tVTK.*|const int tVTK = nSteps / 10;|" ../inc/params.h
+	sed -i.bak "s|const int tRestart.*|const int tRestart = nSteps / 5;|" ../inc/params.h
+
+	rm -f ../inc/params.h.bak
 
 	# Build LIFE
 	(cd .. && make clean && make -j 8)
