@@ -32,6 +32,7 @@ public:
 	virtual double Dt() = 0;
 	virtual double t() = 0;
 	virtual double Dx() = 0;
+	virtual double Dm() = 0;
 	virtual int bodyID() = 0;
 	virtual void setNodePosition(int i, array<double, dims> pos) = 0;
 	virtual void setNodeVelocity(int i, array<double, dims> vel) = 0;

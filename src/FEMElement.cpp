@@ -35,7 +35,7 @@ void FEMElementClass::loadVector() {
 	array<double, dims> weight = {rho * A * gravityX, rho * A * gravityY};
 
 	// Get force scaling parameter
-	double forceScale = fPtr->iPtr->oPtr->gPtr->Dm / SQ(fPtr->iPtr->oPtr->gPtr->Dt);
+	double forceScale = fPtr->listener->Dm() / SQ(fPtr->listener->Dt());
 
 	// Loop through all force mapping nodes
 	for (size_t n = 0; n < forceMap.size(); n++) {

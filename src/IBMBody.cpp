@@ -149,6 +149,11 @@ double IBMBodyClass::Dx()
 	return oPtr->gPtr->Dx;
 };
 
+double IBMBodyClass::Dm()
+{
+	return oPtr->gPtr->Dm;
+};
+
 int IBMBodyClass::bodyID()
 {
 	return ID;

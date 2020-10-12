@@ -57,6 +57,7 @@ public:
 	double Dt();
 	double t();
 	double Dx();
+	double Dm();
 	int bodyID();
 	void setNodePosition(int i, array<double, dims> pos);
 	void setNodeVelocity(int i, array<double, dims> vel);
