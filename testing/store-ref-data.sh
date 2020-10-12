@@ -2,6 +2,12 @@
 
 # Setup some safe shell options
 set -eu -o pipefail
+shopt -s nullglob
+
+if [ ! -r run-tests.sh ]; then
+    echo "$0: Must be run from the testing directory" >&2
+    exit 1
+fi
 
 # Find all example cases
 for d in ../examples/*/
