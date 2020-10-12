@@ -21,6 +21,8 @@ OBJS:=$(addprefix $(ODIR)/,$(notdir $(SRCS:.cpp=.o)))
 INC=
 LIB=-llapack -lboost_system -lboost_filesystem
 
+-include make.config
+
 # Build LIFE
 $(EXE): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) $(LIB)
