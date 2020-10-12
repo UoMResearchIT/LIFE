@@ -189,8 +189,8 @@ void FEMBodyClass::updateIBMValues() {
 		dashUdotShape = Utils::Transpose(Tsub) * dashUdotShape;
 
 		// Set the IBM nodes
-		iPtr->node[i]->pos = el->node[0]->pos + dashUShape;
-		iPtr->node[i]->vel = dashUdotShape;
+		listener->setNodePosition(i,el->node[0]->pos + dashUShape);
+		listener->setNodeVelocity(i, dashUdotShape);
 	}
 }
 
