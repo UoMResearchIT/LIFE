@@ -56,6 +56,7 @@ public:
 	// FEMBodyListenerClass interface
 	double Dt();
 	double t();
+	double Dx();
 
 	// Private members
 private:

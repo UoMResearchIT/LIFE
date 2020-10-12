@@ -512,7 +512,7 @@ FEMBodyClass::FEMBodyClass(IBMBodyClass *iBodyPtr, const array<double, dims> &po
 	// Get number of elements
 	int numElements;
 	if (nElementsStr == "CONFORMING")
-		numElements = static_cast<int>(floor(L0 / iPtr->oPtr->gPtr->Dx));
+		numElements = static_cast<int>(floor(L0 / listener->Dx()));
 	else
 		numElements = static_cast<int>(stod(nElementsStr));
 
