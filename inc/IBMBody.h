@@ -57,6 +57,7 @@ public:
 	double Dt();
 	double t();
 	double Dx();
+	int bodyID();
 
 	// Private members
 private:

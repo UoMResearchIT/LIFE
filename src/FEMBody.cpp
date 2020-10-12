@@ -352,7 +352,7 @@ void FEMBodyClass::resetValues() {
 void FEMBodyClass::setInitialDeflection() {
 
 	// Write out
-	cout << endl << "Starting static FEM for body " << iPtr->ID << "...";
+	cout << endl << "Starting static FEM for body " << listener->bodyID() << "...";
 
 	// Initial deflection
 	double deflect = 0.0;
