@@ -20,6 +20,7 @@
 #define UTILS_H
 
 // Includes
+#include <array>
 #include "params.h"
 
 // Forward declarations

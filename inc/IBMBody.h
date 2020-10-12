@@ -20,6 +20,7 @@
 #define IBMBODY_H
 
 // Includes
+#include <array>
 #include "defs.h"
 #include "IBMNode.h"
 

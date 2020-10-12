@@ -20,6 +20,7 @@
 #define IBMNODE_H
 
 // Includes
+#include <array>
 #include "defs.h"
 #include "IBMSupport.h"
 

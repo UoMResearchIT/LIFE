@@ -20,6 +20,7 @@
 #define GRID_H
 
 // Includes
+#include <array>
 #include "defs.h"
 
 // Forward declarations

@@ -20,6 +20,7 @@
 #define FEMNODE_H
 
 // Includes
+#include <array>
 #include "defs.h"
 
 // FEM node class
