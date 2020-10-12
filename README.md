@@ -63,7 +63,7 @@ LIFE has support for restarting a simulation from where it left off. To do this 
 To contribute to LIFE please follow these steps:
 
  1. Fork the repository and then clone the fork to your local machine.
- 2. On the current master branch run the **store-ref-data** script to generate the test data which will be used for testing your new changes.
+ 2. On the current master branch change into the **testing** directory and run the **store-ref-data** script to generate the test data which will be used for testing your new changes.
  3. Implement and test your new features/functionality.
  4. If implementing a substantial new feature then add a new example to the **examples** directory to showcase this.
  5. Run the **run-tests** script to make sure LIFE still produces the same results for the existing example cases.
