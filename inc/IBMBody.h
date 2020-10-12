@@ -23,13 +23,14 @@
 #include <array>
 #include "defs.h"
 #include "IBMNode.h"
+#include "FEMBody.h"
 
 // Forward declarations
 class ObjectsClass;
 class FEMBodyClass;
 
 // IBM body class
-class IBMBodyClass {
+class IBMBodyClass : public FEMBodyListenerClass {
 
 	// Friend classes
 	friend class ObjectsClass;
@@ -51,6 +52,9 @@ public:
 	// Custom constructor for building filament
 	IBMBodyClass(ObjectsClass *objects, int bodyID, const array<double, dims> &pos, const array<double, dims> &geom,
 			double angle, string flex, string nElements, string BC, double rho, double E);
+  
+	// FEMBodyListenerClass interface
+	double Dt();
 
 	// Private members
 private:

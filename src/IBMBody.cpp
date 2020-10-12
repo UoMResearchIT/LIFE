@@ -133,3 +133,8 @@ IBMBodyClass::IBMBodyClass(ObjectsClass *objects, int bodyID, const array<double
 	if (flex == eFlexible)
 		sBody = new FEMBodyClass(this, pos, geom, angle, nElements, BC, rho, E);
 }
+
+double IBMBodyClass::Dt()
+{
+	return oPtr->gPtr->Dt;
+};

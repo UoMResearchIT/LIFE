@@ -112,7 +112,7 @@ void FEMBodyClass::buildGlobalMatrices() {
 void FEMBodyClass::setNewmark() {
 
 	// Newmark-beta method for time integration
-	double Dt = iPtr->oPtr->gPtr->Dt;
+	double Dt = listener->Dt();
 	double a0, a2, a3;
 	a0 = 1.0 / (alpha * SQ(Dt));
 	a2 = 1.0 / (alpha * Dt);
@@ -129,7 +129,7 @@ void FEMBodyClass::setNewmark() {
 void FEMBodyClass::finishNewmark() {
 
 	// Get timestep
-	double Dt = iPtr->oPtr->gPtr->Dt;
+	double Dt = listener->Dt();
 
 	// Newmark coefficients
 	double a6 = 1.0 / (alpha * SQ(Dt));
@@ -488,6 +488,7 @@ FEMBodyClass::FEMBodyClass(IBMBodyClass *iBodyPtr, const array<double, dims> &po
 
 	// Set pointer
 	iPtr = iBodyPtr;
+	listener = iBodyPtr;
 
 	// Set to initial value
 	itNR = 0;

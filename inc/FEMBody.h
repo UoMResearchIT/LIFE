@@ -27,6 +27,11 @@
 // Forward declarations
 class IBMBodyClass;
 
+class FEMBodyListenerClass {
+public:
+	virtual double Dt() = 0;
+};
+
 // FEM body class
 class FEMBodyClass {
 
@@ -64,6 +69,8 @@ private:
 
 	// Pointer to IBM body
 	IBMBodyClass *iPtr;
+
+	FEMBodyListenerClass *listener;
 
 	// Geometry
 	double L0;					// Initial length
