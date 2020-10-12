@@ -259,17 +259,17 @@ void FEMBodyClass::subResidual() {
 void FEMBodyClass::predictor() {
 
 	// Extrapolate the values
-	if (iPtr->oPtr->gPtr->t > 2) {
+	if (listener->t() > 2) {
 
 		// Do 2rd order extrapolation
 		U = 2.5 * U_n - 2.0 * U_nm1 + 0.5 * U_nm2;
 	}
-	else if (iPtr->oPtr->gPtr->t == 2) {
+	else if (listener->t() == 2) {
 
 		// Do 1st order extrapolation
 		U = 2.0 * U_n - U_nm1;
 	}
-	else if (iPtr->oPtr->gPtr->t == 1) {
+	else if (listener->t() == 1) {
 
 		// Do zeroth order extrapolation
 		U = U_n;

@@ -41,7 +41,7 @@ class IBMBodyClass : public FEMBodyListenerClass {
 	// Default constructor and destructor
 public:
 	IBMBodyClass() {oPtr = NULL; ID = 0; flex = eRigid; bodyType = eCircle; sBody = NULL;};
-	~IBMBodyClass() {};
+	virtual ~IBMBodyClass() {};
 
 	// Custom constructor for creating one object from vector of all objects
 	IBMBodyClass(vector<IBMNodeClass> &iNode);
@@ -55,6 +55,7 @@ public:
   
 	// FEMBodyListenerClass interface
 	double Dt();
+	double t();
 
 	// Private members
 private:

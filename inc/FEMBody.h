@@ -30,6 +30,7 @@ class IBMBodyClass;
 class FEMBodyListenerClass {
 public:
 	virtual double Dt() = 0;
+	virtual double t() = 0;
 };
 
 // FEM body class

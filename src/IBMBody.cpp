@@ -138,3 +138,8 @@ double IBMBodyClass::Dt()
 {
 	return oPtr->gPtr->Dt;
 };
+
+double IBMBodyClass::t()
+{
+	return oPtr->gPtr->t;
+};
