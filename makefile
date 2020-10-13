@@ -14,9 +14,14 @@ HDIR=$(DIR)/inc
 ODIR=$(DIR)/obj
 
 # Get the sources and object files
-SRCS:=$(wildcard $(SDIR)/*.cpp)
-OBJS:=$(addprefix $(ODIR)/,$(notdir $(SRCS:.cpp=.o)))
+LIFESRCS:=FEMBody.cpp FEMElement.cpp FEMNode.cpp Grid.cpp IBMBody.cpp IBMNode.cpp IBMSupport.cpp Objects.cpp Utils.cpp main.cpp
+LIFEOBJS:=$(addprefix $(ODIR)/,$(notdir $(LIFESRCS:.cpp=.o)))
 
+TESTFEMSRCS:=TestFEM.cpp
+TESTFEMOBJS:=$(addprefix $(ODIR)/,$(notdir $(TESTFEMSRCS:.cpp=.o)))
+FEMLIBOBJS:=$(addprefix $(ODIR)/, FEMBody.o FEMElement.o FEMNode.o)
+
+OBJS:=$(LIFEOBJS) $(TESTFEMOBJS)
 # Include and library files
 INC=
 LIB=-llapack -lboost_system -lboost_filesystem
@@ -24,7 +29,7 @@ LIB=-llapack -lboost_system -lboost_filesystem
 -include make.config
 
 # Build LIFE
-$(EXE): $(OBJS)
+$(EXE): $(LIFEOBJS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) $(LIB)
 
 # Build object files
@@ -34,4 +39,12 @@ $(OBJS): $(ODIR)/%.o : $(SDIR)/%.cpp
 # Clean the project
 .PHONY: clean
 clean:
-	rm -rf $(EXE) $(ODIR) Results *.out && mkdir $(ODIR)
+	rm -rf $(EXE) TestFEM $(ODIR) Results *.out && mkdir $(ODIR)
+
+# FEM test program
+TestFEM: $(TESTFEMOBJS) $(ODIR)/libLIFEFEM.a
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) $(LIB)
+
+# Build the FEM library
+$(ODIR)/libLIFEFEM.a: $(FEMLIBOBJS)
+	$(AR) rcs $@ $^
