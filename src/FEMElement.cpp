@@ -271,8 +271,8 @@ FEMElementClass::FEMElementClass(FEMBodyClass *fBody, int i, const array<double,
 	L0 = length;
 	L = length;
 	angle = angleRad;
-	A = fPtr->iPtr->oPtr->gPtr->Dx * geom[1];
-	I = fPtr->iPtr->oPtr->gPtr->Dx * TH(geom[1]) / 12.0;
+	A = fPtr->listener->Dx() * geom[1];
+	I = fPtr->listener->Dx() * TH(geom[1]) / 12.0;
 	E = youngMod;
 	rho = den;
 
