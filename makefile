@@ -14,7 +14,7 @@ HDIR=$(DIR)/inc
 ODIR=$(DIR)/obj
 
 # Get the sources and object files
-LIFESRCS:=FEMBody.cpp FEMElement.cpp FEMNode.cpp Grid.cpp IBMBody.cpp IBMNode.cpp IBMSupport.cpp Objects.cpp Utils.cpp main.cpp
+LIFESRCS:=FEMBody.cpp FEMElement.cpp FEMNode.cpp Grid.cpp GridUtils.cpp IBMBody.cpp IBMNode.cpp IBMSupport.cpp Objects.cpp Utils.cpp main.cpp
 LIFEOBJS:=$(addprefix $(ODIR)/,$(notdir $(LIFESRCS:.cpp=.o)))
 
 TESTFEMSRCS:=TestFEM.cpp

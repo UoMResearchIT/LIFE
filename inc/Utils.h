@@ -37,24 +37,6 @@ void writeHeader();
 // Create directories at start
 bool createDirectories();
 
-// Read in restart file
-void readRestart(GridClass &grid);
-
-// Read in restart file
-void writeRestart(GridClass &grid);
-
-// Write out info
-void writeInfo(GridClass &grid);
-
-// Write out log
-void writeLog(GridClass &grid);
-
-// Write out VTK
-void writeVTK(GridClass &grid);
-
-// Delete future VTKs
-void deleteVTKs(GridClass &grid);
-
 // Get number of omp threads (as built in doesn't work on GCC)
 int omp_thread_count();
 

@@ -20,6 +20,7 @@
 #include "../inc/Grid.h"
 #include "../inc/Objects.h"
 #include "../inc/Utils.h"
+#include "../inc/GridUtils.h"
 
 // ***** Main function ***** //
 int main() {
@@ -48,20 +49,20 @@ int main() {
 	if (grid.restartFlag == true) {
 
 		// Read in restart file
-		Utils::readRestart(grid);
+		GridUtils::readRestart(grid);
 	}
 
 	// Write log
-	Utils::writeLog(grid);
+	GridUtils::writeLog(grid);
 
 	// Starting main algorithm
 	cout << endl << endl << endl << "*** STARTING LIFE ***";
 
 	// Write out info
-	Utils::writeInfo(grid);
+	GridUtils::writeInfo(grid);
 
 	// Write VTK
-	Utils::writeVTK(grid);
+	GridUtils::writeVTK(grid);
 
 	// Start the clock
 	grid.startClock();
@@ -74,15 +75,15 @@ int main() {
 
 		// Write out info
 		if (grid.t % tinfo == 0)
-			Utils::writeInfo(grid);
+			GridUtils::writeInfo(grid);
 
 		// Write VTK
 		if (grid.t % tVTK == 0)
-			Utils::writeVTK(grid);
+			GridUtils::writeVTK(grid);
 
 		// Write restart data
 		if (tRestart > 0 && grid.t % tRestart == 0)
-			Utils::writeRestart(grid);
+			GridUtils::writeRestart(grid);
 	}
 
 	// Starting main algorithm

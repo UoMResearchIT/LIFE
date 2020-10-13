@@ -20,6 +20,7 @@
 #include "../inc/Grid.h"
 #include "../inc/Objects.h"
 #include "../inc/Utils.h"
+#include "../inc/GridUtils.h"
 
 // Main solver
 void GridClass::solver() {
@@ -574,7 +575,7 @@ void GridClass::writeInfo() {
 
 				// Write VTK data
 #ifdef VTK
-				Utils::writeVTK(*this);
+				GridUtils::writeVTK(*this);
 #endif
 				// Tell user where it blew up
 				ERROR("Simulation blew up (t = " + to_string(t) + ") at i = " + to_string(i) + ", j = " + to_string(j) + "...exiting");
