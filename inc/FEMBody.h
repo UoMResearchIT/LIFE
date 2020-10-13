@@ -24,9 +24,6 @@
 #include "FEMNode.h"
 #include "FEMElement.h"
 
-// Forward declarations
-class IBMBodyClass;
-
 class FEMBodyListenerClass {
 public:
 	virtual double Dt() = 0;
@@ -67,18 +64,16 @@ class FEMBodyClass {
 
 	// Default constructor and destructor
 public:
-	FEMBodyClass() {iPtr = NULL; L0 = 0.0; angle0 = 0.0; bodyDOFs = 0; bcDOFs = 0; itNR = 0; resNR = 0.0; tCrit = 0.0; subRes = 0.0; subNum = 0.0; subDen = 0.0;};
+	FEMBodyClass() {listener = NULL; L0 = 0.0; angle0 = 0.0; bodyDOFs = 0; bcDOFs = 0; itNR = 0; resNR = 0.0; tCrit = 0.0; subRes = 0.0; subNum = 0.0; subDen = 0.0;};
 	~FEMBodyClass() {};
 
 	// Custom constructor for building corotational FEM body
-	FEMBodyClass(IBMBodyClass *iBodyPtr, const array<double, dims> &pos, const array<double, dims> &geom, double angle, string nElementsStr, string BC, double rho, double E);
+	FEMBodyClass(FEMBodyListenerClass *listener, const array<double, dims> &pos, const array<double, dims> &geom, double angle, string nElementsStr, string BC, double rho, double E);
 
 	// Private members
 private:
 
-	// Pointer to IBM body
-	IBMBodyClass *iPtr;
-
+	// Pointer to object providing IBM information for the FEMBody
 	FEMBodyListenerClass *listener;
 
 	// Geometry

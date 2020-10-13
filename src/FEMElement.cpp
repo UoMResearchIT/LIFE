@@ -42,7 +42,6 @@ void FEMElementClass::loadVector() {
 
 		// Get node and integration ranges
 		int nodeID = forceMap[n].nodeID;
-		IBMNodeClass *node = fPtr->iPtr->node[nodeID];
 		double epsilon = fPtr->listener->epsilon(nodeID);
 		array<double, dims> force = fPtr->listener->force(nodeID);
 

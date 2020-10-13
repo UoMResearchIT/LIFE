@@ -484,11 +484,10 @@ void FEMBodyClass::newtonRaphsonStatic() {
 }
 
 // Custom constructor for building corotational FEM body
-FEMBodyClass::FEMBodyClass(IBMBodyClass *iBodyPtr, const array<double, dims> &pos, const array<double, dims> &geom, double angle, string nElementsStr, string BC, double rho, double E) {
+FEMBodyClass::FEMBodyClass(FEMBodyListenerClass *listener, const array<double, dims> &pos, const array<double, dims> &geom, double angle, string nElementsStr, string BC, double rho, double E) {
 
 	// Set pointer
-	iPtr = iBodyPtr;
-	listener = iBodyPtr;
+	this->listener = listener;
 
 	// Set to initial value
 	itNR = 0;
