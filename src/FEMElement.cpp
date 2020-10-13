@@ -41,8 +41,11 @@ void FEMElementClass::loadVector() {
 	for (size_t n = 0; n < forceMap.size(); n++) {
 
 		// Get node and integration ranges
-		IBMNodeClass *node = fPtr->iPtr->node[forceMap[n].nodeID];
-		double epsilon = fPtr->listener->epsilon(forceMap[n].nodeID);
+		int nodeID = forceMap[n].nodeID;
+		IBMNodeClass *node = fPtr->iPtr->node[nodeID];
+		double epsilon = fPtr->listener->epsilon(nodeID);
+		array<double, dims> force = fPtr->listener->force(nodeID);
+
 		double a = forceMap[n].zeta1;
 		double b = forceMap[n].zeta2;
 
@@ -51,7 +54,7 @@ void FEMElementClass::loadVector() {
 				 {T[1][0], T[1][1]}}};
 
 		// Convert force to local coordinates
-		F = Tsub * (((-epsilon * 1.0 * forceScale) * node->force) + weight);
+		F = Tsub * (((-epsilon * 1.0 * forceScale) * force) + weight);
 
 		// Get the nodal values by integrating over range of IB point
 		R[0] = F[0] * 0.5 * L * (0.5 * b - 0.5 * a + 0.25 * SQ(a) - 0.25 * SQ(b));

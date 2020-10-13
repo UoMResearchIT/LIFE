@@ -63,6 +63,7 @@ public:
 	void setNodeVelocity(int nodeID, array<double, dims> vel);
 	int numNodes();
 	double epsilon(int nodeID);
+	array<double, dims> force(int nodeID);
 
 	// Private members
 private:

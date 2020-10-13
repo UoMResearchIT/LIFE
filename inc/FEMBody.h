@@ -38,6 +38,7 @@ public:
 	virtual void setNodeVelocity(int nodeID, array<double, dims> vel) = 0;
 	virtual int numNodes() = 0;
 	virtual double epsilon(int nodeID) = 0;
+	virtual array<double, dims> force(int nodeID) = 0;
 };
 
 // FEM body class

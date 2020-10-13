@@ -179,3 +179,8 @@ double IBMBodyClass::epsilon(int nodeID)
 	return node[nodeID]->epsilon;
 }
 
+array<double, dims> IBMBodyClass::force(int nodeID)
+{
+	return node[nodeID]->force;
+}
+
