@@ -173,3 +173,9 @@ int IBMBodyClass::numNodes()
 {
 	return node.size();
 };
+
+double IBMBodyClass::epsilon(int nodeID)
+{
+	return node[nodeID]->epsilon;
+}
+

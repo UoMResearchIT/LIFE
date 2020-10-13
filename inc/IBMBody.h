@@ -62,6 +62,7 @@ public:
 	void setNodePosition(int i, array<double, dims> pos);
 	void setNodeVelocity(int i, array<double, dims> vel);
 	int numNodes();
+	double epsilon(int nodeID);
 
 	// Private members
 private:
