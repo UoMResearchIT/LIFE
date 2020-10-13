@@ -159,14 +159,14 @@ int IBMBodyClass::bodyID()
 	return ID;
 };
 
-void IBMBodyClass::setNodePosition(int i, array<double, dims> pos)
+void IBMBodyClass::setNodePosition(int nodeID, array<double, dims> pos)
 {
-	node[i]->pos = pos;
+	node[nodeID]->pos = pos;
 };
 
-void IBMBodyClass::setNodeVelocity(int i, array<double, dims> vel)
+void IBMBodyClass::setNodeVelocity(int nodeID, array<double, dims> vel)
 {
-	node[i]->vel = vel;
+	node[nodeID]->vel = vel;
 };
 
 int IBMBodyClass::numNodes()

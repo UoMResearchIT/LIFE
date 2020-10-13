@@ -59,8 +59,8 @@ public:
 	double Dx();
 	double Dm();
 	int bodyID();
-	void setNodePosition(int i, array<double, dims> pos);
-	void setNodeVelocity(int i, array<double, dims> vel);
+	void setNodePosition(int nodeID, array<double, dims> pos);
+	void setNodeVelocity(int nodeID, array<double, dims> vel);
 	int numNodes();
 	double epsilon(int nodeID);
 
