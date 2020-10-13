@@ -117,11 +117,13 @@ private:
 	vector<double> R_k;			// Vector of nodal residuals
 	vector<double> R_km1;		// Vector of nodal residuals at last iteration
 
-	// Private methods
-private:
+public:
 
 	// FEM methods
 	void dynamicFEM();				// Dynamic FEM routine
+
+	// Private methods
+private:
 	void newtonRaphsonDynamic();	// Newton Raphson iterator
 	void constructRVector();		// Get load vector
 	void buildGlobalMatrices();		// Build global matrices

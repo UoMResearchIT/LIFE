@@ -19,7 +19,7 @@ LIFEOBJS:=$(addprefix $(ODIR)/,$(notdir $(LIFESRCS:.cpp=.o)))
 
 TESTFEMSRCS:=TestFEM.cpp
 TESTFEMOBJS:=$(addprefix $(ODIR)/,$(notdir $(TESTFEMSRCS:.cpp=.o)))
-FEMLIBOBJS:=$(addprefix $(ODIR)/, FEMBody.o FEMElement.o FEMNode.o)
+FEMLIBOBJS:=$(addprefix $(ODIR)/, FEMBody.o FEMElement.o FEMNode.o Utils.o)
 
 OBJS:=$(LIFEOBJS) $(TESTFEMOBJS)
 # Include and library files
