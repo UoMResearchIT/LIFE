@@ -25,7 +25,6 @@ class TestFEMClass : public FEMBodyListenerClass
 	public:
 
 	TestFEMClass() {
-		double length = 0.35;
 		nNodes = static_cast<int>(floor(length / Dx())) + 1;
 		cout << "nNodes = " << nNodes << endl;
 
@@ -34,25 +33,63 @@ class TestFEMClass : public FEMBodyListenerClass
 			vel.push_back({0,0});
 		}
 		time = 0;
+
+		fBody = new FEMBodyClass(this, {0,0}, {length, width}, 0, "10", "CLAMPED", rho, ym);
+		fBody->dynamicFEM();
+		ofstream of("pos.dat");
+		printNodePositions(of);
+	}
+
+	void printNodePositions(ostream &os) {
+		os << "x" << "\t" << "y" << endl;
+		for (const auto &posi : pos) {
+			os << posi[0] << "\t" << posi[1] << endl;
+		}
 	}
 
 	double Dt() {return 0.00001;};
 	double t() {return time;};
-	double Dx() {return 1./250;};
+	double Dx() {return 1./10;};
 	double Dm() {return 1.0;};
 	int bodyID() {return 0;};
-	void setNodePosition(int nodeID, array<double, dims> newpos) {/*cout << "Setting node " << nodeID << " position to " << newpos[0] << "," << newpos[1] << endl; */pos[nodeID] = newpos;};
+	void setNodePosition(int nodeID, array<double, dims> newpos) {
+		cout << "Setting node " << nodeID << " position to " << newpos[0] << "," << newpos[1] << endl; 
+		pos[nodeID] = newpos;
+	};
 	void setNodeVelocity(int nodeID, array<double, dims> newvel) {vel[nodeID] = newvel;};
 	int numNodes() {return nNodes;};
 	double epsilon(int /*nodeID*/) {return 2;};
-	array<double, dims> force(int /*nodeID*/) {return array<double, dims>({0,-0.01});}
+	array<double, dims> force(int nodeID) {
+		if (nodeID == nNodes-1) {
+			const double Mcr = 2*M_PI*ym*secMomArea/length;
+			const double tipMoment = 0.05 * Mcr;
+			const double tipForce = tipMoment / length;
+			const double tipForceDensity = tipForce * Dx();
+
+			cout << "tipForceDensity = " << tipForceDensity << endl;
+
+			return array<double, dims>({0,tipForce});
+		}
+		else {
+			return array<double, dims>({0,0});
+		}
+	}
 
 	void advanceTime() {time += Dt();};
+		
+	const double ym = 1.4e6;
+	const double rho = 10000.0;
+	const double length = 1.0;
+	const double width = 0.02;
+	const double secMomArea = pow(width,4)/12;
+
 	array<double, dims> getNodePosition(int nodeID) {return pos[nodeID];};
 
 	double getTime() {return time;};
+
 	private:
-	
+	FEMBodyClass  *fBody;
+
 	vector<array<double, dims>> pos;
 	vector<array<double, dims>> vel;
 	int nNodes;
@@ -66,14 +103,16 @@ int main() {
 
 	TestFEMClass testFEM;
 
-	FEMBodyClass  fBody(&testFEM, {0,0}, {0.35,0.02}, 0, "20", "CLAMPED", 10000.0, 1.4e6);
+	// FEMBodyClass  fBody(&testFEM, {0,0}, {0.35,0.02}, 0, "20", "CLAMPED", 10000.0, 1.4e6);
 	
-	for (int i = 0; i < 20; i++) {
-		auto pos = testFEM.getNodePosition(87);
-		cout << "Tip position at time " << testFEM.getTime() << " : " << pos[0] << " " << pos[1] << endl;
-		fBody.dynamicFEM();
-		testFEM.advanceTime();
-	}
+	// for (int i = 0; i < 20; i++) {
+	// 	auto pos = testFEM.getNodePosition(87);
+	// 	cout << "Tip position at time " << testFEM.getTime() << " : " << pos[0] << " " << pos[1] << endl;
+	// 	fBody.dynamicFEM();
+	// 	testFEM.advanceTime();
+	// }
+
+// Try the built-in gravity weight thing. Also change force to force density via 		F = Tsub * (((-epsilon * 1.0 * forceScale) * force) + weight); in FEMElement.cpp
 
 	cout << "TestFEMMain done." << endl;
 }
