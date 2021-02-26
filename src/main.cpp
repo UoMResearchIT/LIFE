@@ -81,9 +81,11 @@ int main() {
 			GridUtils::writeInfo(grid);
 
 		// Write VTK
-		if (tVTK > 0 && grid.t % tVTK == 0)
+		if (tVTK > 0 && grid.t % tVTK == 0) {
 			GridUtils::writeVTK(grid);
-
+			GridUtils::writeASCII(grid);
+		}
+		
 		// Write restart data
 		if (tRestart > 0 && grid.t % tRestart == 0)
 			GridUtils::writeRestart(grid);
