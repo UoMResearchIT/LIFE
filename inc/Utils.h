@@ -23,6 +23,7 @@
 #include <array>
 #include "params.h"
 
+namespace LIFE {
 // Forward declarations
 class GridClass;
 
@@ -288,6 +289,7 @@ inline vector<T> MatMultiply(const vector<T> &LMat, const vector<T> &RVec) {
 
 	// Return
 	return ResVec;
+}
 }
 }
 

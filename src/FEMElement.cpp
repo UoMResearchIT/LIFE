@@ -21,6 +21,8 @@
 #include "../inc/FEMBody.h"
 #include "../inc/Utils.h"
 
+using namespace LIFE;
+
 // Construct load vector
 void FEMElementClass::loadVector() {
 

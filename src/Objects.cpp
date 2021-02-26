@@ -22,6 +22,8 @@
 #include "../inc/Grid.h"
 #include "../inc/Utils.h"
 
+using namespace LIFE;
+
 // Main kernel for objects
 void ObjectsClass::objectKernel() {
 

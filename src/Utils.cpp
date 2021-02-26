@@ -19,6 +19,8 @@
 // Includes
 #include "../inc/Utils.h"
 
+using namespace LIFE;
+
 // Write header at start of run
 void Utils::writeHeader() {
 

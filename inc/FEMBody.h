@@ -24,6 +24,8 @@
 #include "FEMNode.h"
 #include "FEMElement.h"
 
+namespace LIFE {
+
 class FEMBodyListenerClass {
 public:
 	virtual double Dt() = 0;
@@ -142,5 +144,7 @@ private:
 	void computeNodeMapping(int nIBMNodes, int nFEMNodes);	// Get node mappings between FEM and IBM grids
 	void resetValues();										// Reset the start of time step values
 };
+
+}
 
 #endif // FEMBODY_H

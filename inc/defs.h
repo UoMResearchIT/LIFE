@@ -27,6 +27,8 @@
 #include <boost/filesystem.hpp>
 using namespace std;
 
+namespace LIFE {
+
 // Version and release date
 const string version = "v1.0.3";
 const string date = "10th June 2020";
@@ -55,7 +57,9 @@ enum eProfileType {eParabolic, eShear, eBoundaryLayer};
 #define SQ(x) ((x) * (x))
 #define TH(x) ((x) * (x) * (x))
 #define QU(x) ((x) * (x) * (x) * (x))
-#define ERROR Utils::errorExit
-#define WARN Utils::warning
+#define ERROR LIFE::Utils::errorExit
+#define WARN LIFE::Utils::warning
+
+}
 
 #endif	// DEFS_H

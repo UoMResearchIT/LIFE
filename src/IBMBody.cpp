@@ -23,6 +23,8 @@
 #include "../inc/Objects.h"
 #include "../inc/Utils.h"
 
+using namespace LIFE;
+
 // Custom constructor for creating one object from vector of all objects
 IBMBodyClass::IBMBodyClass(vector<IBMNodeClass> &iNode) {
 

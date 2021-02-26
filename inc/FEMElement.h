@@ -23,6 +23,8 @@
 #include <array>
 #include "defs.h"
 
+namespace LIFE {
+
 // Forward declarations
 class FEMBodyClass;
 class FEMNodeClass;
@@ -116,5 +118,7 @@ private:
 	void assembleGlobalMat(const array<array<double, elementDOFs>, elementDOFs> &localVec, vector<double> &globalVec);	// Assemble into global matrix
 	array<double, elementDOFs> disassembleGlobalMat(const vector<double> &globalVec);									// Disassemble global vector
 };
+
+}
 
 #endif // FEMELEMENT_H

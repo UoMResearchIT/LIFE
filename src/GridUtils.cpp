@@ -22,6 +22,8 @@
 #include "../inc/Grid.h"
 #include "../inc/Objects.h"
 
+using namespace LIFE;
+
 // Read in restart file
 void GridUtils::readRestart(GridClass &grid) {
 

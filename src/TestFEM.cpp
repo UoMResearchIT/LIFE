@@ -19,6 +19,7 @@
 // Includes
 #include "../inc/FEMBody.h"
 
+using namespace LIFE;
 
 class TestFEMClass : public FEMBodyListenerClass
 {

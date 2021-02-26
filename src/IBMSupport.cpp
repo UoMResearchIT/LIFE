@@ -19,6 +19,8 @@
 // Includes
 #include "../inc/IBMSupport.h"
 
+using namespace LIFE;
+
 // Custom constructor for building support marker
 IBMSupportClass::IBMSupportClass(int i, int j, double deltaVal) {
 

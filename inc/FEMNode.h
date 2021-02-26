@@ -23,6 +23,8 @@
 #include <array>
 #include "defs.h"
 
+namespace LIFE {
+
 // FEM node class
 class FEMNodeClass {
 
@@ -49,5 +51,7 @@ private:
 	double angle;						// Current angles of FEM node
 	array<int, nodeDOFs> DOFs;			// Global DOFs for this node
 };
+
+}
 
 #endif // FEMNODE_H

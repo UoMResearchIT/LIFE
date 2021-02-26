@@ -22,6 +22,8 @@
 #include "../inc/Objects.h"
 #include "../inc/Utils.h"
 
+using namespace LIFE;
+
 // Interpolate
 void IBMNodeClass::interpolate() {
 

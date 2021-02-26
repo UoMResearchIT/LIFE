@@ -22,6 +22,8 @@
 #include "../inc/Utils.h"
 #include "../inc/GridUtils.h"
 
+using namespace LIFE;
+
 // Main solver
 void GridClass::solver() {
 

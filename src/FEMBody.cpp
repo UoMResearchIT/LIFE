@@ -20,6 +20,8 @@
 #include "../inc/FEMBody.h"
 #include "../inc/Utils.h"
 
+using namespace LIFE;
+
 // Dynamic FEM routine
 void FEMBodyClass::dynamicFEM() {
 

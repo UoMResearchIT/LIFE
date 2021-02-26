@@ -19,6 +19,8 @@
 // Includes
 #include "../inc/FEMNode.h"
 
+using namespace LIFE;
+
 // Custom constructor for building nodes
 FEMNodeClass::FEMNodeClass(int ID, const array<double, dims> &position, double angleRad) {
 
