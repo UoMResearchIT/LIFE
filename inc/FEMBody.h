@@ -124,7 +124,7 @@ public:
 	// FEM methods
 	void dynamicFEM();				// Dynamic FEM routine
 	void staticFEM();				// Static FEM routine
-	void setInitialDeflection();	// Set initial deflection
+	void setInitialDeflection(double initialDeflect);	// Set initial deflection
 
 	// Private methods
 private:

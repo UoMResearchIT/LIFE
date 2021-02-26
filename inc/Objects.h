@@ -99,7 +99,7 @@ private:
 	// Initialisation
 	void removeOverlapMarkers();			// Remove overlapping markers
 	void initialiseObjects();				// Initialise objects
-	void initialDeflect();					// Give FEM body an initial deflection
+	void initialDeflect(double initialDeflect);	// Give FEM body an initial deflection
 
 	// I/O
 	void geometryReadIn();					// Geometry read in

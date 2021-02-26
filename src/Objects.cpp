@@ -1002,7 +1002,7 @@ void ObjectsClass::initialiseObjects() {
 	// Call static FEM to give it an initial deflection
 #ifdef INITIAL_DEFLECT
 	if (hasFlex == true)
-		initialDeflect();
+		initialDeflect(INITIAL_DEFLECT);
 #endif
 
 	// Loop through all nodes
@@ -1020,7 +1020,7 @@ void ObjectsClass::initialiseObjects() {
 }
 
 // Call static FEM to give initial deflection
-void ObjectsClass::initialDeflect() {
+void ObjectsClass::initialDeflect(double initialDeflect) {
 
 	// Starting main algorithm
 	cout << endl << endl << endl << "*** INITIALISING DEFLECTIONS ***" << endl;
@@ -1030,7 +1030,7 @@ void ObjectsClass::initialDeflect() {
 
 		// Only do if flexible
 		if (iBody[ib].flex == eFlexible)
-			iBody[ib].sBody->setInitialDeflection();
+			iBody[ib].sBody->setInitialDeflection(initialDeflect);
 	}
 }
 

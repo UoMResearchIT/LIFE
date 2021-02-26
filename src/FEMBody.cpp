@@ -349,18 +349,14 @@ void FEMBodyClass::resetValues() {
 }
 
 // Set initial deflection using static FEM
-void FEMBodyClass::setInitialDeflection() {
+void FEMBodyClass::setInitialDeflection(double initialDeflect) {
 
 	// Write out
 	cout << endl << "Starting static FEM for body " << listener->bodyID() << "...";
 
 	// Initial deflection
-	double deflect = 0.0;
+	double deflect = -initialDeflect;
 
-	// Set initial deflection
-#ifdef INITIAL_DEFLECT
-	deflect = -INITIAL_DEFLECT;
-#endif
 
 	// Get beam properties
 	double E = element[0].E;
