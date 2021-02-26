@@ -707,6 +707,66 @@ void ObjectsClass::writeLog() {
 	}
 }
 
+void ObjectsClass::writeASCII(bool writeIBM) {
+	// Only write if we have IBM/FEM bodies to write
+	if ((writeIBM && hasIBM == true) || (!writeIBM && hasFlex == true)) {
+
+		// Get the endianness
+		string endianStr = (gPtr->bigEndian ? "BigEndian" : "LittleEndian");
+
+		// Create file
+		string fStr = (writeIBM ? "IBM" : "FEM");
+		ofstream output;
+		output.open("Results/dat/" + fStr + "." + to_string(gPtr->t) + ".dat", ios::ascii);
+
+		// Handle failure to open
+		if (!output.is_open())
+			ERROR("Error opening body dat file...exiting");
+
+		// Now loop through each IBM body
+		unsigned long long offset = 0;
+		for (size_t ib = 0; ib < iBody.size(); ib++) {
+
+			// If FEM then only write flexible bodies
+			if (writeIBM || (!writeIBM && iBody[ib].flex == eFlexible)) {
+
+				// Get number of nodes and lines
+				size_t nNodes = (writeIBM ? iBody[ib].node.size() : iBody[ib].sBody->node.size());
+
+			}
+		}
+
+		// Now loop through each IBM body
+		for (size_t ib = 0; ib < iBody.size(); ib++) {
+
+			// If FEM then only write flexible bodies
+			if (writeIBM || (!writeIBM && iBody[ib].flex == eFlexible)) {
+
+				// Get number of nodes and lines
+				size_t nNodes = (writeIBM ? iBody[ib].node.size() : iBody[ib].sBody->node.size());
+				size_t nLines = (iBody[ib].bodyType == eCircle ? nNodes : nNodes - 1);
+
+				// Positions
+				unsigned long long size = 3 * nNodes * sizeof(double);
+				output.write((char*)&size, sizeof(unsigned long long));
+				for (size_t n = 0; n < nNodes; n++) {
+					double posX = (writeIBM ? iBody[ib].node[n]->pos[eX] : iBody[ib].sBody->node[n].pos[eX]);
+					double posY = (writeIBM ? iBody[ib].node[n]->pos[eY] : iBody[ib].sBody->node[n].pos[eY]);
+					double posZ = 0.0;
+					output << posX << "\t" << posY << "\t" << posZ << endl;
+				}
+
+			}
+		}
+
+		// Close file
+		output.close();
+	}
+}
+
+
+
+
 // Write VTK (IBM or FEM)
 void ObjectsClass::writeVTK(bool writeIBM) {
 

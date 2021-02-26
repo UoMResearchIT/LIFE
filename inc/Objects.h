@@ -77,6 +77,7 @@ public:
 	void writeInfo();						// Write info every tinfo time steps
 	void writeLog();						// Write out log info at start
 	void writeVTK(bool writeIBM = true);	// Write IBM VTK
+	void writeASCII(bool writeIBM = true);	// Write IBM ASCII
 	void writeTotalForces();				// Write out forces on bodies
 	void writeTips();						// Write out tip positions
 	void writeRestart();					// Write restart file

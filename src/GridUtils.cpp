@@ -110,6 +110,23 @@ void GridUtils::writeVTK(GridClass &grid) {
 #endif
 }
 
+// Write ASCII
+void GridUtils::writeASCII(GridClass &grid) {
+
+	// Write ASCII
+#ifdef ASCII
+
+	// Write header
+	cout << endl << "Writing ASCII data...";
+
+	// Write IBM ASCII
+	grid.oPtr->writeASCII();
+
+	// Write header
+	cout << "finished";
+#endif
+}
+
 // Delete future VTKs
 void GridUtils::deleteVTKs(GridClass &grid) {
 

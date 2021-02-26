@@ -64,6 +64,9 @@ int main() {
 	// Write VTK
 	GridUtils::writeVTK(grid);
 
+	// Write VTK
+	GridUtils::writeASCII(grid);
+
 	// Start the clock
 	grid.startClock();
 

@@ -46,6 +46,9 @@ void writeLog(GridClass &grid);
 // Write out VTK
 void writeVTK(GridClass &grid);
 
+// Write out ASCII
+void writeASCII(GridClass &grid);
+
 // Delete future VTKs
 void deleteVTKs(GridClass &grid);
 
