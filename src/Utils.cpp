@@ -66,6 +66,13 @@ bool Utils::createDirectories() {
 		ERROR("Problem creating vtk directory...exiting");
 #endif
 
+	// Create ASCII directory
+#ifdef ASCII
+	if (!boost::filesystem::create_directory("Results/dat"))
+		ERROR("Problem creating dat directory...exiting");
+#endif
+
+
 	// Only create restart directory if we need to
 	if (tRestart > 0) {
 		if (!boost::filesystem::create_directory("Results/Restart"))

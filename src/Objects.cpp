@@ -717,7 +717,7 @@ void ObjectsClass::writeASCII(bool writeIBM) {
 		// Create file
 		string fStr = (writeIBM ? "IBM" : "FEM");
 		ofstream output;
-		output.open("Results/dat/" + fStr + "." + to_string(gPtr->t) + ".dat", ios::ascii);
+		output.open("Results/dat/" + fStr + "." + to_string(gPtr->t) + ".dat", ios::out);
 
 		// Handle failure to open
 		if (!output.is_open())
@@ -744,11 +744,8 @@ void ObjectsClass::writeASCII(bool writeIBM) {
 
 				// Get number of nodes and lines
 				size_t nNodes = (writeIBM ? iBody[ib].node.size() : iBody[ib].sBody->node.size());
-				size_t nLines = (iBody[ib].bodyType == eCircle ? nNodes : nNodes - 1);
 
 				// Positions
-				unsigned long long size = 3 * nNodes * sizeof(double);
-				output.write((char*)&size, sizeof(unsigned long long));
 				for (size_t n = 0; n < nNodes; n++) {
 					double posX = (writeIBM ? iBody[ib].node[n]->pos[eX] : iBody[ib].sBody->node[n].pos[eX]);
 					double posY = (writeIBM ? iBody[ib].node[n]->pos[eY] : iBody[ib].sBody->node[n].pos[eY]);
