@@ -124,6 +124,7 @@ public:
 	// FEM methods
 	void dynamicFEM();				// Dynamic FEM routine
 	void staticFEM();				// Static FEM routine
+	void setInitialDeflection();	// Set initial deflection
 
 	// Private methods
 private:
@@ -135,7 +136,6 @@ private:
 	void updateIBMValues();			// Update IBM values
 	void updateFEMValues();			// Update FEM parameters
 	double checkNRConvergence();	// Check convergence of Newton Raphson iterator
-	void setInitialDeflection();	// Set initial deflection
 	void newtonRaphsonStatic();		// Static Newton Raphson iterator
 	void predictor();				// Structural predictor at start of time step
 	void subResidual();				// Subiteration residual for this body
