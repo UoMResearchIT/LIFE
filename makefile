@@ -16,6 +16,7 @@ ODIR=$(DIR)/obj
 # Get the sources and object files
 LIFESRCS:=FEMBody.cpp FEMElement.cpp FEMNode.cpp Grid.cpp GridUtils.cpp IBMBody.cpp IBMNode.cpp IBMSupport.cpp Objects.cpp Utils.cpp main.cpp
 LIFEOBJS:=$(addprefix $(ODIR)/,$(notdir $(LIFESRCS:.cpp=.o)))
+LIFEHDRS:=$(wildcard $(HDIR)/*.h)
 
 TESTFEMSRCS:=TestFEM.cpp
 TESTFEMOBJS:=$(addprefix $(ODIR)/,$(notdir $(TESTFEMSRCS:.cpp=.o)))
@@ -33,7 +34,7 @@ $(EXE): $(LIFEOBJS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) $(LIB)
 
 # Build object files
-$(OBJS): $(ODIR)/%.o : $(SDIR)/%.cpp
+$(OBJS): $(ODIR)/%.o : $(SDIR)/%.cpp $(LIFEHDRS)
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
 # Clean the project
