@@ -77,11 +77,11 @@ int main() {
 		grid.solver();
 
 		// Write out info
-		if (grid.t % tinfo == 0)
+		if (tinfo > 0 && grid.t % tinfo == 0)
 			GridUtils::writeInfo(grid);
 
 		// Write VTK
-		if (grid.t % tVTK == 0)
+		if (tVTK > 0 && grid.t % tVTK == 0)
 			GridUtils::writeVTK(grid);
 
 		// Write restart data
