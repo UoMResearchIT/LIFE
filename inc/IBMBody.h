@@ -25,6 +25,8 @@
 #include "IBMNode.h"
 #include "FEMBody.h"
 
+namespace LIFE {
+
 // Forward declarations
 class ObjectsClass;
 class FEMBodyClass;
@@ -82,5 +84,7 @@ private:
 	// Pointer to FEM body
 	FEMBodyClass *sBody;				// Pointer to structural solver
 };
+
+}
 
 #endif // IBMBODY_H

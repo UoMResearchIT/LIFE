@@ -24,6 +24,8 @@
 #include "IBMBody.h"
 #include "IBMNode.h"
 
+namespace LIFE {
+
 // Forward declarations
 class GridClass;
 
@@ -110,5 +112,6 @@ private:
 	void deleteTipsAndForces();				// Delete tip and force data that was written after last restart
 	void deleteFileOutput(string fname);	// Delete data from output files that was written after last restart
 };
+}
 
 #endif // OBJECTS_H

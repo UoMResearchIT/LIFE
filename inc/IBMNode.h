@@ -24,6 +24,8 @@
 #include "defs.h"
 #include "IBMSupport.h"
 
+namespace LIFE {
+
 // Forward declarations
 class IBMBodyClass;
 
@@ -81,5 +83,7 @@ private:
 	void spread();							// Spread force back
 	void updateMacroscopic();				// Update macroscopic values at support points
 };
+
+}
 
 #endif // IBMNODE_H

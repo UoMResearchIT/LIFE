@@ -23,6 +23,8 @@
 #include <array>
 #include "defs.h"
 
+namespace LIFE {
+
 // Forward declarations
 class ObjectsClass;
 
@@ -133,5 +135,7 @@ private:
 	array<int, dims> getNormalVector(int i, int j, eDirectionType &normalDirection);	// Get normal vector for boundary site
 	double getRampCoefficient();														// Get inlet ramp coefficient
 };
+
+}
 
 #endif // GRID_H

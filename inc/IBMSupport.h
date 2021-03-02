@@ -19,6 +19,8 @@
 #ifndef IBMSUPPORT_H // IBMSUPPORT_H
 #define IBMSUPPORT_H
 
+namespace LIFE {
+
 // IBM support class
 class IBMSupportClass {
 
@@ -42,5 +44,7 @@ private:
 	int jdx;					// j-index
 	double diracVal;			// Dirac delta for support site
 };
+
+}
 
 #endif // IBMSUPPORT_H

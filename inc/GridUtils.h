@@ -23,6 +23,8 @@
 #include <array>
 #include "params.h"
 
+namespace LIFE {
+
 // Forward declarations
 class GridClass;
 
@@ -53,5 +55,7 @@ void writeASCII(GridClass &grid);
 void deleteVTKs(GridClass &grid);
 
 } // namespace GridUtils
+
+}
 
 #endif // UTILS_H
