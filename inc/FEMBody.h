@@ -125,6 +125,7 @@ public:
 	void dynamicFEM();				// Dynamic FEM routine
 	void staticFEM();				// Static FEM routine
 	void setInitialDeflection(double initialDeflect);	// Set initial deflection
+	void resetValues();										// Reset the start of time step values
 
 	// Private methods
 private:
@@ -142,7 +143,6 @@ private:
 
 	// Helper routines
 	void computeNodeMapping(int nIBMNodes, int nFEMNodes);	// Get node mappings between FEM and IBM grids
-	void resetValues();										// Reset the start of time step values
 };
 
 }
