@@ -382,7 +382,7 @@ void FEMBodyClass::setInitialDeflection(double initialDeflect) {
 
 	// Declare feedback loop parameters
 	array<double, dims> deflectVector;
-	double gain = 1e-3;
+	double gain = deflectionGain;
 	double TOL = 1e-10;
 	int MAXIT = 10000;
 	int it = 0;
