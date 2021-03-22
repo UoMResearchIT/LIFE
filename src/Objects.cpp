@@ -51,6 +51,10 @@ void ObjectsClass::objectKernel() {
 		// Increase subIt
 		subIt++;
 
+#ifdef SINGLE_FEM_SUBITERATION
+		break; // Only run a single subiteration
+#endif
+
 	} while (subIt < MAXIT && subRes > subTol);
 
 	// Do IBM spreading step
