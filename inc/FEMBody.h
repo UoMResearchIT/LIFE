@@ -126,6 +126,7 @@ public:
 	void staticFEM();				// Static FEM routine
 	void setInitialDeflection(double initialDeflect);	// Set initial deflection
 	void resetValues();										// Reset the start of time step values
+	void predictor();				// Structural predictor at start of time step
 
 	// Private methods
 private:
@@ -138,7 +139,6 @@ private:
 	void updateFEMValues();			// Update FEM parameters
 	double checkNRConvergence();	// Check convergence of Newton Raphson iterator
 	void newtonRaphsonStatic();		// Static Newton Raphson iterator
-	void predictor();				// Structural predictor at start of time step
 	void subResidual();				// Subiteration residual for this body
 
 	// Helper routines
