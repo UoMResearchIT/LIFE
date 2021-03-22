@@ -726,19 +726,6 @@ void ObjectsClass::writeASCII(bool writeIBM) {
 			ERROR("Error opening body dat file...exiting");
 
 		// Now loop through each IBM body
-		unsigned long long offset = 0;
-		for (size_t ib = 0; ib < iBody.size(); ib++) {
-
-			// If FEM then only write flexible bodies
-			if (writeIBM || (!writeIBM && iBody[ib].flex == eFlexible)) {
-
-				// Get number of nodes and lines
-				size_t nNodes = (writeIBM ? iBody[ib].node.size() : iBody[ib].sBody->node.size());
-
-			}
-		}
-
-		// Now loop through each IBM body
 		for (size_t ib = 0; ib < iBody.size(); ib++) {
 
 			// If FEM then only write flexible bodies
@@ -779,19 +766,6 @@ void ObjectsClass::writeYAML(bool writeIBM) {
 		output.precision(17);
 
 		output << gPtr->t << ":" << endl;
-
-		// Now loop through each IBM body
-		unsigned long long offset = 0;
-		for (size_t ib = 0; ib < iBody.size(); ib++) {
-
-			// If FEM then only write flexible bodies
-			if (writeIBM || (!writeIBM && iBody[ib].flex == eFlexible)) {
-
-				// Get number of nodes and lines
-				size_t nNodes = (writeIBM ? iBody[ib].node.size() : iBody[ib].sBody->node.size());
-
-			}
-		}
 
 		// Now loop through each IBM body
 		for (size_t ib = 0; ib < iBody.size(); ib++) {
