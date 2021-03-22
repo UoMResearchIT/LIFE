@@ -719,6 +719,9 @@ void ObjectsClass::writeASCII(bool writeIBM) {
 		// Create file
 		string fStr = (writeIBM ? "IBM" : "FEM");
 		ofstream output;
+
+		output.precision(17);
+
 		output.open("Results/dat/" + fStr + "." + to_string(gPtr->t) + ".dat", ios::out);
 
 		// Handle failure to open
