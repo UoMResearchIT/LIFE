@@ -74,6 +74,11 @@ bool Utils::createDirectories() {
 		ERROR("Problem creating dat directory...exiting");
 #endif
 
+	// Create YAML directory
+#ifdef YAML
+	if (!boost::filesystem::create_directory("Results/YAML"))
+		ERROR("Problem creating YAML directory...exiting");
+#endif
 
 	// Only create restart directory if we need to
 	if (tRestart > 0) {

@@ -129,6 +129,23 @@ void GridUtils::writeASCII(GridClass &grid) {
 #endif
 }
 
+// Write YAML
+void GridUtils::writeYAML(GridClass &grid) {
+
+	// Write YAML
+#ifdef YAML
+
+	// Write header
+	cout << endl << "Writing YAML data...";
+
+	// Write IBM YAML
+	grid.oPtr->writeYAML();
+
+	// Write header
+	cout << "finished";
+#endif
+}
+
 // Delete future VTKs
 void GridUtils::deleteVTKs(GridClass &grid) {
 

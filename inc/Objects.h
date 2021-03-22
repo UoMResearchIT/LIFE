@@ -80,6 +80,7 @@ public:
 	void writeLog();						// Write out log info at start
 	void writeVTK(bool writeIBM = true);	// Write IBM VTK
 	void writeASCII(bool writeIBM = true);	// Write IBM ASCII
+	void writeYAML(bool writeIBM = true);	// Write IBM YAML
 	void writeTotalForces();				// Write out forces on bodies
 	void writeTips();						// Write out tip positions
 	void writeRestart();					// Write restart file

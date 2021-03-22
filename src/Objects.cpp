@@ -763,6 +763,67 @@ void ObjectsClass::writeASCII(bool writeIBM) {
 	}
 }
 
+void ObjectsClass::writeYAML(bool writeIBM) {
+	// Only write if we have IBM/FEM bodies to write
+	if ((writeIBM && hasIBM == true) || (!writeIBM && hasFlex == true)) {
+
+		// Create file
+		string fStr = (writeIBM ? "IBM" : "FEM");
+		ofstream output;
+		output.open("Results/YAML/" + fStr + ".yml", ios::app);
+
+		// Handle failure to open
+		if (!output.is_open())
+			ERROR("Error opening body dat file...exiting");
+
+		output.precision(17);
+
+		output << gPtr->t << ":" << endl;
+
+		// Now loop through each IBM body
+		unsigned long long offset = 0;
+		for (size_t ib = 0; ib < iBody.size(); ib++) {
+
+			// If FEM then only write flexible bodies
+			if (writeIBM || (!writeIBM && iBody[ib].flex == eFlexible)) {
+
+				// Get number of nodes and lines
+				size_t nNodes = (writeIBM ? iBody[ib].node.size() : iBody[ib].sBody->node.size());
+
+			}
+		}
+
+		// Now loop through each IBM body
+		for (size_t ib = 0; ib < iBody.size(); ib++) {
+
+			// If FEM then only write flexible bodies
+			if (writeIBM || (!writeIBM && iBody[ib].flex == eFlexible)) {
+
+				// Get number of nodes and lines
+				size_t nNodes = (writeIBM ? iBody[ib].node.size() : iBody[ib].sBody->node.size());
+
+				// Positions
+				for (size_t n = 0; n < nNodes; n++) {
+					output << "  - index: " << n << endl;
+					output << "    active: " << endl;
+					// TODO: remove dx/2, which was added for comparison with GASCANS
+					output << "    pos: [" << iBody[ib].node[n]->pos[eX] << "," << iBody[ib].node[n]->pos[eY] << "]" << endl;
+					output << "    vel: [" << iBody[ib].node[n]->vel[eX] << "," << iBody[ib].node[n]->vel[eY] << "]" << endl;
+
+					output << "    ivel: [" << iBody[ib].node[n]->interpMom[eX]/iBody[ib].node[n]->interpRho << "," << iBody[ib].node[n]->interpMom[eY]/iBody[ib].node[n]->interpRho << "]" << endl;
+					output << "    iden: " << iBody[ib].node[n]->interpRho << endl;
+					output << "    force: [" << iBody[ib].node[n]->force[eX] << "," << iBody[ib].node[n]->force[eY] << "]" << endl;
+					output << "    ds: " << iBody[ib].node[n]->ds << endl;
+					output << "    eps: " << iBody[ib].node[n]->epsilon << endl;
+				}
+			}
+		}
+
+		// Close file
+		output.close();
+	}
+}
+
 
 
 

@@ -69,6 +69,9 @@ int main() {
 	// Write VTK
 	GridUtils::writeASCII(grid);
 
+	// Write YAML
+	GridUtils::writeYAML(grid);
+
 	// Start the clock
 	grid.startClock();
 
@@ -86,6 +89,7 @@ int main() {
 		if (tVTK > 0 && grid.t % tVTK == 0) {
 			GridUtils::writeVTK(grid);
 			GridUtils::writeASCII(grid);
+			GridUtils::writeYAML(grid);
 		}
 		
 		// Write restart data

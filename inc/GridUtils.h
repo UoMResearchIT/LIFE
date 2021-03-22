@@ -51,6 +51,9 @@ void writeVTK(GridClass &grid);
 // Write out ASCII
 void writeASCII(GridClass &grid);
 
+// Write out YAML
+void writeYAML(GridClass &grid);
+
 // Delete future VTKs
 void deleteVTKs(GridClass &grid);
 
