@@ -512,26 +512,30 @@ void ObjectsClass::writeTotalForces() {
 
 		// Write out header
 		if (existing == false)
-			output << "Timestep\tTime (s)\tFx (N)\tFy (N)\tCx\tCy";
+			output << "Timestep\tTime (s)\tFx (N)\tFy (N)";
 
 		// Get force scaling
 		double forceScale = gPtr->Dm * gPtr->Dx / SQ(gPtr->Dt) * 1.0 / gPtr->Dx;
 
-		// Force vector
-		array<double, dims> force = {0.0};
-
-		// Get total force
-		for (size_t n = 0; n < iNode.size(); n++) {
-			for (int d = 0; d < dims; d++) {
-				force[d] -= iNode[n].force[d] * 1.0 * iNode[n].epsilon * iNode[n].ds * forceScale;
-			}
-		}
-
 		// Get ND force
-		double ND = 0.5 * ref_rho * SQ(ref_U) * ref_L;
+		//double ND = 0.5 * ref_rho * SQ(ref_U) * ref_L;
 
 		// Write out
-		output << endl << gPtr->t << "\t" << gPtr->Dt * gPtr->t << "\t" << force[eX] << "\t" << force[eY] << "\t" << force[eX] / ND << "\t" << force[eY] / ND;
+		output << endl << gPtr->t << "\t" << gPtr->Dt * gPtr->t;
+
+		// Now loop through all flexible bodies
+		for (size_t ib = 0; ib < iBody.size(); ib++) {
+
+			// Get total force
+			array<double, dims> force = {0.0};
+			for (size_t n = 0; n < iBody[ib].node.size(); n++) {
+				for (int d = 0; d < dims; d++) {
+					force[d] -= iBody[ib].node[n]->force[d] * 1.0 * iBody[ib].node[n]->epsilon * iBody[ib].node[n]->ds * forceScale;
+				}
+			}
+
+			output << "\t" << force[eX] << "\t" << force[eY];
+		}
 
 		// Close file
 		output.close();
@@ -590,6 +594,69 @@ void ObjectsClass::writeTips() {
 		// Close file
 		outputPos.close();
 		outputVel.close();
+	}
+}
+
+// Write out strain energies
+void ObjectsClass::writeEnergies() {
+
+	// Only write if there are FEM bodies
+	if (hasFlex == true) {
+
+		// File names
+		string fnameEner = "Results/StrainEnergies.out";
+
+		// Check if files already exist
+		bool existingEner = false;
+		if (boost::filesystem::exists(fnameEner))
+			existingEner = true;
+		
+		// Open the file
+		ofstream outputEner;
+		outputEner.open(fnameEner.c_str(), ios::app);
+		outputEner.precision(PRECISION);
+
+		// Handle failure to open
+		if (!outputEner.is_open())
+			ERROR("Error opening StrainEnergies files...exiting");
+
+		// Write out header
+		if (existingEner == false)
+			outputEner << "Timestep\tTime (s)\tEs_A (J/m)\t Es_M (J/m)";
+		
+		// Write out
+		outputEner << endl << gPtr->t << "\t" << gPtr->Dt * gPtr->t;
+
+		// Get lattice spacing
+		double Dx = gPtr->Dx;
+
+		// Now loop through all flexible bodies
+		for (size_t ib = 0; ib < iBody.size(); ib++) {
+
+			// Only do if flexible
+			if (iBody[ib].flex == eFlexible) {
+
+				// Get Strain Energy
+				double Es_A = 0;
+				double Es_M = 0;
+				for (size_t n = 0; n < iBody[ib].sBody->element.size(); n++) {
+					double energyA = 0;
+					double energyM = 0;
+					energyA = iBody[ib].sBody->element[n].E * iBody[ib].sBody->element[n].A *
+					SQ((iBody[ib].sBody->element[n].L - iBody[ib].sBody->element[n].L0)/iBody[ib].sBody->element[n].L0);
+
+					energyM = iBody[ib].sBody->element[n].E * iBody[ib].sBody->element[n].I *
+					SQ((iBody[ib].sBody->element[n].node[1]->angle - iBody[ib].sBody->element[n].node[0]->angle)/iBody[ib].sBody->element[n].L0);
+
+					Es_A += 0.5 * energyA * iBody[ib].sBody->element[n].L0 /Dx;
+					Es_M += 0.5 * energyM * iBody[ib].sBody->element[n].L0 /Dx;
+			}
+				outputEner << "\t" << Es_A << "\t" << Es_M;
+			}
+		}
+
+		// Close file
+		outputEner.close();
 	}
 }
 

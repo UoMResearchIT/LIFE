@@ -41,6 +41,7 @@ const int resFactor = 2;
 //#define VTK_FEM						// Write out the FEM VTK
 #define FORCES							// Write out forces on structures
 #define TIPS							// Write out tip positions
+#define ENERGIES						// Write out strain energies
 
 // Domain setup (lattice)
 const int Nx = resFactor * 250 + 1;   	// Number of lattice sites in x-direction

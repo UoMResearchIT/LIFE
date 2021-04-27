@@ -130,9 +130,13 @@ void Utils::writeInfo(GridClass &grid) {
 	grid.oPtr->writeTotalForces();
 #endif
 
-	// Write out forces on bodies
+	// Write out tip positions
 #ifdef TIPS
 	grid.oPtr->writeTips();
+#endif
+	// Write out Strain Energies
+#ifdef ENERGIES
+	grid.oPtr->writeEnergies();
 #endif
 }
 
