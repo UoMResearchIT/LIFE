@@ -22,10 +22,14 @@ TESTFEMSRCS:=TestFEM.cpp
 TESTFEMOBJS:=$(addprefix $(ODIR)/,$(notdir $(TESTFEMSRCS:.cpp=.o)))
 FEMLIBOBJS:=$(addprefix $(ODIR)/, FEMBody.o FEMElement.o FEMNode.o Utils.o)
 
+ifeq ($(LAPACK_LIB),)
+LAPACK_LIB := -llapack
+endif
+
 OBJS:=$(LIFEOBJS) $(TESTFEMOBJS)
 # Include and library files
 INC=
-LIB=-llapack -lboost_system -lboost_filesystem
+LIB=$(LAPACK_LIB) -lboost_system -lboost_filesystem
 
 -include make.config
 
