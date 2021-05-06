@@ -73,7 +73,7 @@ public:
 	FEMBodyClass(FEMBodyListenerClass *listener, const array<double, dims> &pos, const array<double, dims> &geom, double angle, string nElementsStr, string BC, double rho, double E);
 
 	// Private members
-private:
+public:
 
 	// Pointer to object providing IBM information for the FEMBody
 	FEMBodyListenerClass *listener;
@@ -129,7 +129,7 @@ public:
 	void predictor();				// Structural predictor at start of time step
 
 	// Private methods
-private:
+public:
 	void newtonRaphsonDynamic();	// Newton Raphson iterator
 	void constructRVector();		// Get load vector
 	void buildGlobalMatrices();		// Build global matrices
