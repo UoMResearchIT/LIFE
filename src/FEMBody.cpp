@@ -19,11 +19,14 @@
 // Includes
 #include "../inc/FEMBody.h"
 #include "../inc/Utils.h"
+#include "../inc/Trace.h"
 
 using namespace LIFE;
 
 // Dynamic FEM routine
 void FEMBodyClass::dynamicFEM() {
+
+	trace.trace("EnterDynamicFEM");
 
 	// Reset back to start of time step
 	U = U_n;
@@ -65,6 +68,8 @@ void FEMBodyClass::dynamicFEM() {
 
 	// Get subiteration residual for this body (will be summed later on)
 	subResidual();
+
+	trace.trace("ExitDynamicFEM");
 }
 
 // Newton raphson iterator

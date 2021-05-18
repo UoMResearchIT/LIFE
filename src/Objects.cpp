@@ -22,14 +22,22 @@
 #include "../inc/Grid.h"
 #include "../inc/Utils.h"
 
+#include "../inc/Trace.h"
+
 using namespace LIFE;
+
+Trace trace(false);
 
 // Main kernel for objects
 void ObjectsClass::objectKernel() {
 
+	trace.trace("EnterObjectKernel");
+
+
 	// While loop parameters
 	subIt = 0;
 	int MAXIT = 20;
+	Tracer subItTracer("subIt", [this](){return number_to_string(subIt);});
 
 	// Subiteration loop
 	do {
@@ -63,6 +71,8 @@ void ObjectsClass::objectKernel() {
 	// If it reached max iterations then exit
 	if (subIt == MAXIT)
 		ERROR("Subiteration scheme hit " + to_string(subIt) + " iterations...exiting");
+	trace.trace("ExitObjectKernel");
+
 }
 
 // Do FEM and update IBM positions and velocities
@@ -1059,6 +1069,13 @@ void ObjectsClass::initialiseObjects() {
 
 	// Compute epsilon
 	computeEpsilon();
+
+	trace.addTracer("tipy", [this](){return number_to_string(iNode[iNode.size()-1].pos[1]);});
+	trace.addTracer("starty", [this](){return number_to_string(iNode[0].pos[1]);});
+	trace.addTracer("tipFy", [this](){return number_to_string(iNode[iNode.size()-1].force[1]);});
+	trace.addTracer("t", [this](){return number_to_string(gPtr->t);});
+	trace.addTracer("subRes", [this](){return number_to_string(subRes);});
+	trace.addTracer("fBody->subRes", [this](){return number_to_string(iBody[0].sBody->subRes);});
 }
 
 // Call static FEM to give initial deflection
