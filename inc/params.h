@@ -35,6 +35,7 @@ const int resFactor = 2;
 #define UNI_EPSILON					// Calculate epsilon over all IBM bodies at once
 #define ORDERED						// For deterministic reduction operations
 //#define INITIAL_DEFLECT 0.01		// Set an initial deflection (fraction of L)
+#define PIEZO_EFFECT                // Use piezoelectric material
 
 // Outputs
 #define VTK								// Write out VTK
