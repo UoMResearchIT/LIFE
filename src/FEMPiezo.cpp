@@ -23,10 +23,109 @@
 #include "../inc/Utils.h"
 
 
+// Newton raphson iterator A CHANGER
+void FEMPiezoClass::newtonRaphsonDynamic() {
+
+	// Build global matrices
+	buildGlobalMatrices();
+
+	// Apply Newmark scheme (using Newmark coefficients)
+	setNewmark();
+
+	// Solve linear system using LAPACK library
+	delU = Utils::solveLAPACK(K, F, bcDOFs);
+
+	// Add deltaU to X
+	U = U + delU;
+
+	// Update U
+
+
+	// Update FEM positions
+	fPtr->updateFEMValues();
+}
+
+
+// Check convergence of Newton Raphson iterator
+inline double FEMPiezoClass::checkNRConvergence () {
+
+	// Get the norm of delU
+	return sqrt(delX * delX) / (ref_L * sqrt(static_cast<double>(delX.size())));
+}
+
+
+// Build global matrices A FAIRE
+void FEMPiezoClass::buildGlobalMatrices() {
+
+	// Set matrices to zero
+	fill(Mp.begin(), Mp.end(), 0.0);
+	fill(Dp.begin(), Dp.end(), 0.0);
+	fill(Kp.begin(), Kp.end(), 0.0);
+	fill(Fp.begin(), Fp.end(), 0.0);
+
+	// Build global matrices
+	vector<double> Mm = fPtr->M;
+	vector<double> Km = fPtr->K;
 
 
 
 
+
+
+
+
+
+}
+
+
+// Set Newmark A CHANGER
+void FEMPiezoClass::setNewmark() {
+
+	// Newmark-beta method for time integration
+	double Dt = iPtr->oPtr->gPtr->Dt;
+	double a0, a2, a3;
+	a0 = 1.0 / (alpha * SQ(Dt));
+	a2 = 1.0 / (alpha * Dt);
+	a3 = 1.0 / (2.0 * alpha) - 1.0;
+
+	// Calculate effective load vector
+	F = R - F + Utils::MatMultiply(M, a0 * (U_n - U) + a2 * Udot + a3 * Udotdot);
+
+	// Calculate effective stiffness matrix
+	K = K + a0 * M;
+}
+
+
+
+// Finish Newmark A CHANGER
+void FEMPiezoClass::finishNewmark() {
+
+	// Get timestep
+	double Dt = iPtr->oPtr->gPtr->Dt;
+
+	// Newmark coefficients
+	double a6 = 1.0 / (alpha * SQ(Dt));
+	double a7 = -1.0 / (alpha * Dt);
+	double a8 = -(1.0 / (2.0 * alpha) - 1.0);
+	double a9 = Dt * (1.0 - delta);
+	double a10 = delta * Dt;
+
+	// Update velocities and accelerations
+	Udotdot = a6 * (U - U_n) + a7 * Udot_n + a8 * Udotdot_n;
+	Udot = Udot_n + a9 * Udotdot_n + a10 * Udotdot;
+}
+
+
+// Reset the start of time step values
+void FEMPiezoClass::resetValues() {
+
+	// Reset start of time step values
+	X_nm2.swap(X_nm1);
+	X_nm1.swap(X_n);
+	X_n.swap(X);
+	Xdot_n.swap(Xdot);
+	Xdotdot_n.swap(Xdotdot);
+}
 
 
 // Custom constructor for building FEM piezo
