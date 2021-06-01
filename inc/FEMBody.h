@@ -33,6 +33,7 @@ class FEMBodyClass {
 	// Friend classes
 	friend class FEMElementClass;
 	friend class ObjectsClass;
+	friend class FEMPiezoClass;
 
 	// Nested class for mapping to IBM positions
 	class posMapClass {

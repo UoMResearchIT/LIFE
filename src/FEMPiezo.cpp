@@ -17,8 +17,58 @@
 */
 
 // Includes
+#include "../inc/FEMPiezo.h"
+#include "../inc/Grid.h"
+#include "../inc/Objects.h"
+#include "../inc/Utils.h"
 
 
 
 
 
+
+
+
+// Custom constructor for building FEM piezo
+FEMPiezoClass::FEMPiezoClass(FEMBodyClass *fBodyPtr) {
+
+	// Set pointer
+	fPtr = fBodyPtr;
+
+	// Set sub residaul, numerator and denominator to initial value
+	subRes = 0.0;
+	subNum = 0.0;
+	subDen = 0.0;
+
+	// Get number of DOFs required for BC
+	bcDOFs = fPtr->bcDOFs;
+
+	// Unpack geometry
+	
+
+	
+
+	// Get number of DOFs in piezobody
+	piezoDOFs = fPtr->bodyDOFs; // + qqc lié avec Q
+
+
+
+	// Size the matrices
+	Mp.resize(piezoDOFs * piezoDOFs, 0.0);
+	Dp.resize(piezoDOFs * piezoDOFs, 0.0);
+	Kp.resize(piezoDOFs * piezoDOFs, 0.0);
+	Rp.resize(piezoDOFs, 0.0);
+	Fp.resize(piezoDOFs, 0.0);
+	X.resize(piezoDOFs, 0.0);
+	delX.resize(piezoDOFs, 0.0);
+	Xdot.resize(piezoDOFs, 0.0);
+	Xdotdot.resize(piezoDOFs, 0.0);
+	X_n.resize(piezoDOFs, 0.0);
+	X_nm1.resize(piezoDOFs, 0.0);
+	X_nm2.resize(piezoDOFs, 0.0);
+	Xdot_n.resize(piezoDOFs, 0.0);
+	Xdotdot_n.resize(piezoDOFs, 0.0);
+	X_km1.resize(piezoDOFs, 0.0);
+	Rp_k.resize(piezoDOFs, 0.0);
+	Rp_km1.resize(piezoDOFs, 0.0);
+}

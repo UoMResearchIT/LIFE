@@ -240,7 +240,7 @@ inline double FEMBodyClass::checkNRConvergence () {
 	return sqrt(delU * delU) / (ref_L * sqrt(static_cast<double>(delU.size())));
 }
 
-// Do a sum reduction to get the subiteration residual
+// Do a sum reduction to get the subiteration residual A CHANGER POUR PIEZO !!!!!
 void FEMBodyClass::subResidual() {
 
 	// Get the residual from this time step and reassign old time step value
