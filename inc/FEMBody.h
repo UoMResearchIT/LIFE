@@ -23,9 +23,11 @@
 #include "defs.h"
 #include "FEMNode.h"
 #include "FEMElement.h"
+#include "FEMPiezo.h"
 
 // Forward declarations
 class IBMBodyClass;
+class FEMPiezoClass;
 
 // FEM body class
 class FEMBodyClass {
@@ -65,6 +67,7 @@ private:
 
 	// Pointer to IBM body
 	IBMBodyClass *iPtr;
+	FEMPiezoClass *fpPtr;
 
 	// Geometry
 	double L0;					// Initial length

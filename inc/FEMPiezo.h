@@ -31,7 +31,7 @@ class FEMBodyClass;
 class FEMPiezoClass {
 
     // Friend classes
-
+    friend class FEMBodyClass;
 
 // Default constructor and destructor
 public:
@@ -85,7 +85,15 @@ private:
 private:
 
     // FEM methods
+    void newtonRaphsonDynamic();	// Newton Raphson iterator
+    double checkNRConvergence();	// Check convergence of Newton Raphson iterator
+    void buildGlobalMatrices();		// Build global matrices
+    void setNewmark();				// Set Newmark scheme
+	void finishNewmark();			// Finish Newmark
 
+
+    // Helper routines
+    void resetValues();										// Reset the start of time step values
 
 };
 
