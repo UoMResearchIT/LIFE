@@ -45,20 +45,30 @@ void FEMBodyClass::dynamicFEM() {
 
 	// While loop for FEM solver
 	do {
+#ifdef PIEZO_EFFECT
+		// Solve and iterate over the system
+		fpPtr->newtonRaphsonDynamic();
 
+		// Check residual
+		resNR = fpPtr->checkNRConvergence();
+#else
 		// Solve and iterate over the system
 		newtonRaphsonDynamic();
 
 		// Check residual
 		resNR = checkNRConvergence();
-
+#endif
 		// Increment counter
 		itNR++;
 
 	} while (resNR > TOL && itNR < MAXIT);
 
 	// Compute new velocities and accelerations
+#ifdef PIEZO_EFFECT
+	fpPtr->finishNewmark();
+#else
 	finishNewmark();
+#endif
 
 	// Update IBM nodes
 	updateIBMValues();
@@ -279,12 +289,19 @@ void FEMBodyClass::predictor() {
 	updateFEMValues();
 
 	// Update the velocity
+#ifdef PIEZO_EFFECT
+	fpPtr->finishNewmark();
+#else
 	finishNewmark();
+#endif
 
 	// Update IBM values
 	updateIBMValues();
 
 	// Set U_km1
+#ifdef PIEZO_EFFECT
+	fpPtr->X_km1.swap(fpPtr->X);
+#endif
 	U_km1.swap(U);
 }
 
@@ -346,6 +363,10 @@ void FEMBodyClass::resetValues() {
 	U_n.swap(U);
 	Udot_n.swap(Udot);
 	Udotdot_n.swap(Udotdot);
+
+#ifdef PIEZO_EFFECT
+	fpPtr->resetValues();
+#endif
 }
 
 // Set initial deflection using static FEM
