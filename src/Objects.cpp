@@ -438,6 +438,13 @@ void ObjectsClass::geometryReadIn() {
 			string BC; file >> BC;
 			double rho; file >> rho;
 			double E; file >> E;
+#ifdef PIEZO_EFFECT
+			double piezo_cst; file >> piezo_cst;
+			double dielec_cst; file >> dielec_cst;
+			double Rohm; file >> Rohm;						// Resistance
+			double L; file >> L;							// Induction
+			// ADD OTHER constant IF NECESSARY !!!!!!!!!!
+#endif
 
 			// Loop through and build
 			for (int i = 0; i < number; i++) {
@@ -446,7 +453,11 @@ void ObjectsClass::geometryReadIn() {
 				array<double, dims> pos = {start[eX] + i * space[eX], start[eY] + i * space[eY]};
 
 				// Call constructor to build it
+#ifdef PIEZO_EFFECT
+				iBody.emplace_back(this, ID, pos, geom, angle, flex, nElements, BC, rho, E, piezo_cst, dielec_cst, Rohm, L);
+#else
 				iBody.emplace_back(this, ID, pos, geom, angle, flex, nElements, BC, rho, E);
+#endif
 
 				// Increment body ID
 				ID++;

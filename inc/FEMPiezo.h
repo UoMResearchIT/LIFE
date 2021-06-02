@@ -39,7 +39,7 @@ public:
 	~FEMPiezoClass() {};
 
 	// Custom constructor for building corotational FEM body
-	FEMPiezoClass(FEMBodyClass *fBodyPtr);
+	FEMPiezoClass(FEMBodyClass *fBodyPtr, double piezo_cst, double dielec_cst, double Rohm, double L);
 
 
     // Private members

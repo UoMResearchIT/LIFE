@@ -505,7 +505,8 @@ void FEMBodyClass::newtonRaphsonStatic() {
 }
 
 // Custom constructor for building corotational FEM body
-FEMBodyClass::FEMBodyClass(IBMBodyClass *iBodyPtr, const array<double, dims> &pos, const array<double, dims> &geom, double angle, string nElementsStr, string BC, double rho, double E) {
+FEMBodyClass::FEMBodyClass(IBMBodyClass *iBodyPtr, const array<double, dims> &pos, const array<double, dims> &geom, double angle, string nElementsStr, string BC,
+	double rho, double E, double piezo_cst, double dielec_cst, double Rohm, double L) {
 
 	// Set pointer
 	iPtr = iBodyPtr;
@@ -596,4 +597,9 @@ FEMBodyClass::FEMBodyClass(IBMBodyClass *iBodyPtr, const array<double, dims> &po
 	U_km1.resize(bodyDOFs, 0.0);
 	R_k.resize(bodyDOFs, 0.0);
 	R_km1.resize(bodyDOFs, 0.0);
+
+	// Build Piezo if defined
+#ifdef PIEZO_EFFECT
+	fpPtr = new FEMPiezoClass(this, piezo_cst, dielec_cst, Rohm, L);
+#endif
 }

@@ -49,7 +49,8 @@ public:
 
 	// Custom constructor for building filament
 	IBMBodyClass(ObjectsClass *objects, int bodyID, const array<double, dims> &pos, const array<double, dims> &geom,
-			double angle, string flex, string nElements, string BC, double rho, double E);
+			double angle, string flex, string nElements, string BC, double rho, double E,
+			double piezo_cst, double dielec_cst, double Rohm, double L);
 
 	// Private members
 private:
