@@ -6,6 +6,12 @@
         "list": "cpp",
         "string": "cpp",
         "vector": "cpp",
-        "functional": "cpp"
+        "functional": "cpp",
+        "random": "cpp",
+        "iosfwd": "cpp",
+        "iostream": "cpp",
+        "limits": "cpp",
+        "streambuf": "cpp",
+        "string_view": "cpp"
     }
 }

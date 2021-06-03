@@ -50,6 +50,12 @@ private:
 
     // Geometry
 
+    // Structural properties
+	double piezo_cst;						// Pielectric constant
+	double dielec_cst;						// dielectric constant
+    double Rohm;                            // Resistance
+    double L;                               // Inductance
+
     // System values
 	int piezoDOFs;				// DOFs for whole body
 	int bcDOFs;					// Number of DOFs removed when applying BCs
