@@ -23,7 +23,7 @@
 #include "../inc/Utils.h"
 
 
-// Newton raphson iterator A CHANGER
+// Newton raphson iterator
 void FEMPiezoClass::newtonRaphsonDynamic() {
 
 	// Build global matrices
@@ -33,13 +33,14 @@ void FEMPiezoClass::newtonRaphsonDynamic() {
 	setNewmark();
 
 	// Solve linear system using LAPACK library
-	delU = Utils::solveLAPACK(K, F, bcDOFs);
+	delX = Utils::solveLAPACK(Kp, Fp, bcDOFs);
 
 	// Add deltaU to X
-	U = U + delU;
+	X = X + delX;
 
 	// Update U
-
+	fPtr->U = X;
+	fPtr->U.pop_back();
 
 	// Update FEM positions
 	fPtr->updateFEMValues();
@@ -54,7 +55,7 @@ inline double FEMPiezoClass::checkNRConvergence () {
 }
 
 
-// Build global matrices A FAIRE
+// Build global matrices A FAIRE !!!!!!!!!!
 void FEMPiezoClass::buildGlobalMatrices() {
 
 	// Set matrices to zero
@@ -66,6 +67,8 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	// Build global matrices
 	vector<double> Mm = fPtr->M;
 	vector<double> Km = fPtr->K;
+	vector<double> F = fPtr->F;
+
 
 
 
@@ -78,7 +81,7 @@ void FEMPiezoClass::buildGlobalMatrices() {
 }
 
 
-// Set Newmark A CHANGER
+// Set Newmark A CHANGER !!!!!!!!!!!!!!!!!
 void FEMPiezoClass::setNewmark() {
 
 	// Newmark-beta method for time integration
@@ -96,8 +99,7 @@ void FEMPiezoClass::setNewmark() {
 }
 
 
-
-// Finish Newmark A CHANGER
+// Finish Newmark A CHANGER !!!!!!!!!!!!!!!!!!!!!
 void FEMPiezoClass::finishNewmark() {
 
 	// Get timestep
@@ -129,7 +131,7 @@ void FEMPiezoClass::resetValues() {
 
 
 // Custom constructor for building FEM piezo
-FEMPiezoClass::FEMPiezoClass(FEMBodyClass *fBodyPtr) {
+FEMPiezoClass::FEMPiezoClass(FEMBodyClass *fBodyPtr, double piezo_cst, double dielec_cst, double Rohm, double L) {
 
 	// Set pointer
 	fPtr = fBodyPtr;
@@ -148,9 +150,7 @@ FEMPiezoClass::FEMPiezoClass(FEMBodyClass *fBodyPtr) {
 	
 
 	// Get number of DOFs in piezobody
-	piezoDOFs = fPtr->bodyDOFs; // + qqc lié avec Q
-
-
+	piezoDOFs = fPtr->bodyDOFs + 1;
 
 	// Size the matrices
 	Mp.resize(piezoDOFs * piezoDOFs, 0.0);
