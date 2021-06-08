@@ -78,7 +78,7 @@ IBMBodyClass::IBMBodyClass(ObjectsClass *objects, int bodyID,  const array<doubl
 // Custom constructor for building filament
 IBMBodyClass::IBMBodyClass(ObjectsClass *objects, int bodyID, const array<double, dims> &pos, const array<double, dims> &geom,
 		double angle, string flexStr, string nElements, string BC, double rho, double E,
-		double piezo_cst, double dielec_cst, double Rohm, double L) {
+		double hp, double piezo_cst, double dielec_cst, double Rohm, double L) {
 
 	// Set body values
 	oPtr = objects;
@@ -132,5 +132,5 @@ IBMBodyClass::IBMBodyClass(ObjectsClass *objects, int bodyID, const array<double
 
 	// If flexible then build body
 	if (flex == eFlexible)
-		sBody = new FEMBodyClass(this, pos, geom, angle, nElements, BC, rho, E, piezo_cst, dielec_cst, Rohm, L);
+		sBody = new FEMBodyClass(this, pos, geom, angle, nElements, BC, rho, E, hp, piezo_cst, dielec_cst, Rohm, L);
 }

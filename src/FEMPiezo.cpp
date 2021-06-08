@@ -81,9 +81,23 @@ void FEMPiezoClass::buildGlobalMatrices() {
 
 	// Build global matrices Kp
 	vector<double> Km = fPtr->K;
+		// Build C
+	double C = dielec_cst * fPtr->L0 / hp; // Non dimensionalised by the Width
+		// Build K1 and K2 (with the hyp of one patch over all the length on each side)
+	vector<double> K1;
+	vector<double> K2;
+	K1.resize(dim * dim, 0.0);
+	K2.resize(dim * dim, 0.0);
 
+	K1[0] = -1*piezo_cst; // Non dimensionalised by the Width
+	K1[2] = piezo_cst * (h+hp)/2; // Non dimensionalised by the Width
+	K1[dim*dim-3] = piezo_cst; // Non dimensionalised by the Width
+	K1[dim*dim-1] = -1*piezo_cst * (h+hp)/2; // Non dimensionalised by the Width
 
-
+	K2[0] = piezo_cst; // Non dimensionalised by the Width
+	K2[2] = piezo_cst * (h+hp)/2; // Non dimensionalised by the Width
+	K2[dim*dim-3] = -1*piezo_cst; // Non dimensionalised by the Width
+	K2[dim*dim-1] = -1*piezo_cst * (h+hp)/2; // Non dimensionalised by the Width
 
 
 
@@ -96,7 +110,6 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	for (size_t i = 0; i < F.size(); i++) {
 		Fp[i] = F[i];
 	}
-
 }
 
 
@@ -150,7 +163,7 @@ void FEMPiezoClass::resetValues() {
 
 
 // Custom constructor for building FEM piezo
-FEMPiezoClass::FEMPiezoClass(FEMBodyClass *fBodyPtr, double piezo_cst, double dielec_cst, double Rohm, double L) {
+FEMPiezoClass::FEMPiezoClass(FEMBodyClass *fBodyPtr, double h, double hp, double piezo_cst, double dielec_cst, double Rohm, double L) {
 
 	// Set pointer
 	fPtr = fBodyPtr;

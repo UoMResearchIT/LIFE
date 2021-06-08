@@ -439,6 +439,7 @@ void ObjectsClass::geometryReadIn() {
 			double rho; file >> rho;
 			double E; file >> E;
 #ifdef PIEZO_EFFECT
+			double hp; file >> hp;							// Thickness of the piezo patches
 			double piezo_cst; file >> piezo_cst;
 			double dielec_cst; file >> dielec_cst;
 			double Rohm; file >> Rohm;						// Resistance
@@ -454,7 +455,7 @@ void ObjectsClass::geometryReadIn() {
 
 				// Call constructor to build it
 #ifdef PIEZO_EFFECT
-				iBody.emplace_back(this, ID, pos, geom, angle, flex, nElements, BC, rho, E, piezo_cst, dielec_cst, Rohm, L);
+				iBody.emplace_back(this, ID, pos, geom, angle, flex, nElements, BC, rho, E, hp, piezo_cst, dielec_cst, Rohm, L);
 #else
 				iBody.emplace_back(this, ID, pos, geom, angle, flex, nElements, BC, rho, E);
 #endif

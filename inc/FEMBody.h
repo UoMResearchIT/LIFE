@@ -61,7 +61,7 @@ public:
 
 	// Custom constructor for building corotational FEM body
 	FEMBodyClass(IBMBodyClass *iBodyPtr, const array<double, dims> &pos, const array<double, dims> &geom, double angle, string nElementsStr, string BC,
-		double rho, double E, double piezo_cst, double dielec_cst, double Rohm, double L);
+		double rho, double E, double hp, double piezo_cst, double dielec_cst, double Rohm, double L);
 
 	// Private members
 private:

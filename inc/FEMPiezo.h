@@ -39,7 +39,7 @@ public:
 	~FEMPiezoClass() {};
 
 	// Custom constructor for building corotational FEM body
-	FEMPiezoClass(FEMBodyClass *fBodyPtr, double piezo_cst, double dielec_cst, double Rohm, double L);
+	FEMPiezoClass(FEMBodyClass *fBodyPtr, double h, double hp, double piezo_cst, double dielec_cst, double Rohm, double L);
 
 
     // Private members
@@ -49,6 +49,8 @@ private:
 	FEMBodyClass *fPtr;
 
     // Geometry
+    double h;                               // Thickness of the beam
+    double hp;                              // Thickness of the piezo patches
 
     // Structural properties
 	double piezo_cst;						// Pielectric constant
