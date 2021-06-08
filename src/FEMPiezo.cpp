@@ -64,19 +64,38 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	fill(Kp.begin(), Kp.end(), 0.0);
 	fill(Fp.begin(), Fp.end(), 0.0);
 
-	// Build global matrices
+	// Build global matrices Mp
 	vector<double> Mm = fPtr->M;
+		// Copy of Mm
+	int dim = fPtr->bodyDOFs;
+	for (size_t i = 0; i < dim; i++) {
+		for (size_t j = 0; j < dim; j++) {
+			Mp[i * piezoDOFs + j] = Mm[i * dim + j];
+		}
+	}
+		// Add piezo characteristic
+	Mp[piezoDOFs * piezoDOFs -1] = L;
+
+	// Build global matrices Dp
+	Dp[piezoDOFs * piezoDOFs -1] = Rohm;
+
+	// Build global matrices Kp
 	vector<double> Km = fPtr->K;
+
+
+
+
+
+
+
+
+
+	// Build global matrices Fp
 	vector<double> F = fPtr->F;
-
-
-
-
-
-
-
-
-
+		// Copy of F
+	for (size_t i = 0; i < F.size(); i++) {
+		Fp[i] = F[i];
+	}
 
 }
 
@@ -150,7 +169,7 @@ FEMPiezoClass::FEMPiezoClass(FEMBodyClass *fBodyPtr, double piezo_cst, double di
 	
 
 	// Get number of DOFs in piezobody
-	piezoDOFs = fPtr->bodyDOFs + 1;
+	piezoDOFs = fPtr->bodyDOFs + 1; // Add in function of the number of flags
 
 	// Size the matrices
 	Mp.resize(piezoDOFs * piezoDOFs, 0.0);

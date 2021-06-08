@@ -12,6 +12,7 @@
         "iostream": "cpp",
         "limits": "cpp",
         "streambuf": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "ratio": "cpp"
     }
 }
