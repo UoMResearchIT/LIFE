@@ -117,32 +117,44 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	for (size_t i = 0; i < F.size(); i++) {
 		Fp[i] = F[i];
 	}
+
+	// Build global matrices Rp
+	vector<double> R = fPtr->R;
+		// Copy of R
+	for (size_t i = 0; i < R.size(); i++) {
+		Rp[i] = R[i];
+	}
 }
 
 
-// Set Newmark A CHANGER !!!!!!!!!!!!!!!!!
+// Set Newmark
 void FEMPiezoClass::setNewmark() {
 
 	// Newmark-beta method for time integration
-	double Dt = iPtr->oPtr->gPtr->Dt;
-	double a0, a2, a3;
+	double Dt = fPtr->iPtr->oPtr->gPtr->Dt;
+	double a0, a2, a3, a11, a9, a12, a13;
 	a0 = 1.0 / (alpha * SQ(Dt));
 	a2 = 1.0 / (alpha * Dt);
 	a3 = 1.0 / (2.0 * alpha) - 1.0;
+	a9 = Dt * (1.0 - delta);
+	a11 = delta / (alpha * Dt);
+	a12 = delta / alpha;
+	a13 = Dt * delta * a3;
 
 	// Calculate effective load vector
-	F = R - F + Utils::MatMultiply(M, a0 * (U_n - U) + a2 * Udot + a3 * Udotdot);
+	Fp = Rp - Fp + Utils::MatMultiply(Mp, a0 * X + a2 * Xdot + a3 * Xdotdot)
+				 + Utils::MatMultiply(Dp, (1 - a12) * Xdot + (a9 - a13) * Xdotdot - a11 * X);
 
 	// Calculate effective stiffness matrix
-	K = K + a0 * M;
+	Kp = Kp + a0 * Mp + a11 * Dp;
 }
 
 
-// Finish Newmark A CHANGER !!!!!!!!!!!!!!!!!!!!!
+// Finish Newmark
 void FEMPiezoClass::finishNewmark() {
 
 	// Get timestep
-	double Dt = iPtr->oPtr->gPtr->Dt;
+	double Dt = fPtr->iPtr->oPtr->gPtr->Dt;
 
 	// Newmark coefficients
 	double a6 = 1.0 / (alpha * SQ(Dt));
@@ -152,8 +164,8 @@ void FEMPiezoClass::finishNewmark() {
 	double a10 = delta * Dt;
 
 	// Update velocities and accelerations
-	Udotdot = a6 * (U - U_n) + a7 * Udot_n + a8 * Udotdot_n;
-	Udot = Udot_n + a9 * Udotdot_n + a10 * Udotdot;
+	Xdotdot = a6 * (X - X_n) + a7 * Xdot_n + a8 * Xdotdot_n;
+	Xdot = Xdot_n + a9 * Xdotdot_n + a10 * Xdotdot;
 }
 
 

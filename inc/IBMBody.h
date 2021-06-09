@@ -34,6 +34,7 @@ class IBMBodyClass {
 	friend class ObjectsClass;
 	friend class IBMNodeClass;
 	friend class FEMBodyClass;
+	friend class FEMPiezoClass;
 	friend class FEMElementClass;
 
 	// Default constructor and destructor
