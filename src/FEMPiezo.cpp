@@ -55,7 +55,7 @@ inline double FEMPiezoClass::checkNRConvergence () {
 }
 
 
-// Build global matrices A FAIRE !!!!!!!!!!
+// Build global matrices
 void FEMPiezoClass::buildGlobalMatrices() {
 
 	// Set matrices to zero
@@ -83,26 +83,33 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	vector<double> Km = fPtr->K;
 		// Build C
 	double C = dielec_cst * fPtr->L0 / hp; // Non dimensionalised by the Width
-		// Build K1 and K2 (with the hyp of one patch over all the length on each side)
+		// Build K1 and K2 (with the hyp of one patch over all the length on each side and for a single flag)
 	vector<double> K1;
 	vector<double> K2;
-	K1.resize(dim * dim, 0.0);
-	K2.resize(dim * dim, 0.0);
+	K1.resize(dim, 0.0);
+	K2.resize(dim, 0.0);
 
 	K1[0] = -1*piezo_cst; // Non dimensionalised by the Width
 	K1[2] = piezo_cst * (h+hp)/2; // Non dimensionalised by the Width
-	K1[dim*dim-3] = piezo_cst; // Non dimensionalised by the Width
-	K1[dim*dim-1] = -1*piezo_cst * (h+hp)/2; // Non dimensionalised by the Width
+	K1[dim-3] = piezo_cst; // Non dimensionalised by the Width
+	K1[dim-1] = -1*piezo_cst * (h+hp)/2; // Non dimensionalised by the Width
 
 	K2[0] = piezo_cst; // Non dimensionalised by the Width
 	K2[2] = piezo_cst * (h+hp)/2; // Non dimensionalised by the Width
-	K2[dim*dim-3] = -1*piezo_cst; // Non dimensionalised by the Width
-	K2[dim*dim-1] = -1*piezo_cst * (h+hp)/2; // Non dimensionalised by the Width
-
-
-
-
-
+	K2[dim-3] = -1*piezo_cst; // Non dimensionalised by the Width
+	K2[dim-1] = -1*piezo_cst * (h+hp)/2; // Non dimensionalised by the Width
+		// Build Kp
+	vector<double> Kp;
+	for (size_t i = 0; i < dim; i++) {
+		for (size_t j = 0; j < dim; j++) {
+			Kp[i * piezoDOFs + j] = Km[i * dim + j] + (K1[i]*K1[j] + K2[i]*K2[j])/C;
+		}
+	}
+	for (size_t ij = 0; ij < dim; ij++) {
+		Kp[(piezoDOFs-1) * piezoDOFs + ij] = (K1[ij] + K2[ij])/C;
+		Kp[ij * piezoDOFs + (piezoDOFs-1)] = (K1[ij] + K2[ij])/C;
+	}
+	Kp[piezoDOFs*piezoDOFs-1] = 2/C;
 
 	// Build global matrices Fp
 	vector<double> F = fPtr->F;
