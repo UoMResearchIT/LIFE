@@ -32,19 +32,20 @@ void IBMNodeClass::interpolate() {
 	interpRho = 0.0;
 	fill(interpMom.begin(), interpMom.end(), 0.0);
 
-	// Loop through support points and interpolate
-	for (size_t s = 0; s < suppCount; s++) {
-
-		// Get ID
-		int id = supp[s].idx * Ny + supp[s].jdx;
-
-		// Interpolate density
-		interpRho += gPtr->rho[id] * supp[s].diracVal * 1.0 * 1.0;
-
-		// Interpolate momentum
-		for (int d = 0; d < dims; d++)
-			interpMom[d] += gPtr->rho[id] * gPtr->u[id * dims + d] * supp[s].diracVal * 1.0 * 1.0;
-	}
+	// JO: Commented out to prevent force from fluid onto flap
+//	// Loop through support points and interpolate
+//	for (size_t s = 0; s < suppCount; s++) {
+//
+//		// Get ID
+//		int id = supp[s].idx * Ny + supp[s].jdx;
+//
+//		// Interpolate density
+//		interpRho += gPtr->rho[id] * supp[s].diracVal * 1.0 * 1.0;
+//
+//		// Interpolate momentum
+//		for (int d = 0; d < dims; d++)
+//			interpMom[d] += gPtr->rho[id] * gPtr->u[id * dims + d] * supp[s].diracVal * 1.0 * 1.0;
+//	}
 }
 
 // Force calculation
@@ -63,34 +64,35 @@ void IBMNodeClass::spread() {
 	// Get pointer to grid
 	GridClass *gPtr = iPtr->oPtr->gPtr;
 
-	// Loop through support
-	for (size_t s = 0; s < suppCount; s++) {
-
-		// Get ID
-		int id = supp[s].idx * Ny + supp[s].jdx;
-
-		// Get forces
-		double Fx = force[eX] * epsilon * ds * 1.0 * supp[s].diracVal;
-		double Fy = force[eY] * epsilon * ds * 1.0 * supp[s].diracVal;
-
-		// Do either atomic (for performance) or ordered (for repeatability) reduction
-#ifdef ORDERED
-#pragma omp ordered
-		{
-			// Ordered write so is repeatable for different runs
-			gPtr->force_ibm[id * dims + eX] += Fx;
-			gPtr->force_ibm[id * dims + eY] += Fy;
-		}
-#else
-		// Atomic operation for concurrent writes
-#pragma omp atomic update
-		gPtr->force_ibm[id * dims + eX] += Fx;
-
-		// Atomic operation for concurrent writes
-#pragma omp atomic update
-		gPtr->force_ibm[id * dims + eY] += Fy;
-#endif
-	}
+	// JO: Commented out to prevent force from flap onto fluid
+//	// Loop through support
+//	for (size_t s = 0; s < suppCount; s++) {
+//
+//		// Get ID
+//		int id = supp[s].idx * Ny + supp[s].jdx;
+//
+//		// Get forces
+//		double Fx = force[eX] * epsilon * ds * 1.0 * supp[s].diracVal;
+//		double Fy = force[eY] * epsilon * ds * 1.0 * supp[s].diracVal;
+//
+//		// Do either atomic (for performance) or ordered (for repeatability) reduction
+//#ifdef ORDERED
+//#pragma omp ordered
+//		{
+//			// Ordered write so is repeatable for different runs
+//			gPtr->force_ibm[id * dims + eX] += Fx;
+//			gPtr->force_ibm[id * dims + eY] += Fy;
+//		}
+//#else
+//		// Atomic operation for concurrent writes
+//#pragma omp atomic update
+//		gPtr->force_ibm[id * dims + eX] += Fx;
+//
+//		// Atomic operation for concurrent writes
+//#pragma omp atomic update
+//		gPtr->force_ibm[id * dims + eY] += Fy;
+//#endif
+//	}
 }
 
 // Update macroscopic
