@@ -1,20 +1,3 @@
-/*
-    LIFE: Lattice boltzmann-Immersed boundary-Finite Element
-    Copyright (C) 2019 Joseph O'Connor
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
 
 #ifndef PARAMS_H	// PARAMS_H
 #define PARAMS_H
@@ -23,26 +6,26 @@
 #include "defs.h"
 
 // Set number of OMP threads (if commented then it will use system max)
-//#define THREADS 12
+//#define THREADS 2
 
 // Set resFactor (for easily changing mesh resolution)
 const int resFactor = 3;
 
 // Simulation options
 //#define CENTRAL_MOMENTS			// Use central moments collision operator (BGK otherwise)
-#define INLET_RAMP 2.0				// Inlet velocity ramp-up
+//#define INLET_RAMP 2.0			// Inlet velocity ramp-up
 //#define WOMERSLEY 5.0				// Womersley number for oscillating pressure gradients
-#define UNI_EPSILON					// Calculate epsilon over all IBM bodies at once
+//#define UNI_EPSILON				// Calculate epsilon over all IBM bodies at once
 #define ORDERED						// For deterministic reduction operations
-//#define INITIAL_DEFLECT 0.01		// Set an initial deflection (fraction of L)
-#define PIEZO_EFFECT                // Use piezoelectric material
+#define INITIAL_DEFLECT 0.01		// Set an initial deflection (fraction of L)
+#define PIEZO_EFFECT
 
 // Outputs
 #define VTK								// Write out VTK
 //#define VTK_FEM						// Write out the FEM VTK
 #define FORCES							// Write out forces on structures
 #define TIPS							// Write out tip positions
-#define ENERGIES						// Write out strain energies
+#define ENERGIES						// Write out Strain Energies
 
 // Domain setup (lattice)
 const int Nx = resFactor * 10 * 10 + 1;   	// Number of lattice sites in x-direction
@@ -51,7 +34,7 @@ const int Ny = resFactor * 10 * 5 + 1;		// Number of lattice sites in y-directio
 // Domain setup (physical)
 const double height_p = 0.2;			// Domain height (m)
 const double rho_p = 1.2047;			// Fluid density (kg/m^3)
-const double nu_p = 0.5e-2;				// Fluid kinematic viscosity (m^2/s)
+const double nu_p = 0.5e-2;			// Fluid kinematic viscosity (m^2/s)
 
 // Initial conditions
 const double ux0_p = 10.0;				// Initial x-velocity (m/s)
@@ -66,8 +49,8 @@ const double dpdy = 0.0;				// Pressure gradient in x-direction (Pa/m)
 // Boundary conditions (set to eFluid for periodic)
 #define WALL_LEFT	eVelocity			// Boundary condition at left wall
 #define WALL_RIGHT	eConvective			// Boundary condition at right wall
-#define WALL_BOTTOM	eFluid				// Boundary condition at bottom wall
-#define WALL_TOP	eFluid				// Boundary condition at top wall
+#define WALL_BOTTOM	eFluid			// Boundary condition at bottom wall
+#define WALL_TOP	eFluid			// Boundary condition at top wall
 //#define PROFILE 	eParabolic			// Profile shape (uncomment for uniform)
 
 // Inlet conditions
@@ -97,9 +80,9 @@ const double omega = 1.0 / (nu_p * tStep / (pow(1.0 / sqrt(3.0), 2.0) * pow(heig
 
 // Number of time steps and how often to write out
 const int nSteps = static_cast<int>(round(1 / tStep));	// Number of timesteps
-const int tinfo = nSteps / 100;
-const int tVTK = nSteps / 20;
-const int tRestart = nSteps / 10;
+const int tinfo = nSteps / 1000;								// Frequency to write out info and logs
+const int tVTK = nSteps / 10;								// Frequency to write out VTK
+const int tRestart = nSteps / 10;							// Frequency to write out restart files
 
 // Reference values
 const double ref_nu = nu_p;			// Reference kinematic viscosity (m^2/s)
