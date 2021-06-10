@@ -48,7 +48,7 @@ void FEMPiezoClass::newtonRaphsonDynamic() {
 
 
 // Check convergence of Newton Raphson iterator
-inline double FEMPiezoClass::checkNRConvergence () {
+double FEMPiezoClass::checkNRConvergence () {
 
 	// Get the norm of delX
 	return sqrt(delX * delX) / (ref_L * sqrt(static_cast<double>(delX.size())));
