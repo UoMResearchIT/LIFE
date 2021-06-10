@@ -30,6 +30,11 @@ void FEMBodyClass::dynamicFEM() {
 	U = U_n;
 	Udot = Udot_n;
 	Udotdot = Udotdot_n;
+#ifdef PIEZO_EFFECT
+	fpPtr->X = fpPtr->X_n;
+	fpPtr->Xdot = fpPtr->Xdot_n;
+	fpPtr->Xdotdot = fpPtr->Xdotdot_n;
+#endif
 
 	// Update FEM elements
 	updateFEMValues();
@@ -51,7 +56,8 @@ void FEMBodyClass::dynamicFEM() {
 		fpPtr->newtonRaphsonDynamic();
 
 		// Check residual
-		resNR = fpPtr->checkNRConvergence();
+		//resNR = fpPtr->checkNRConvergence();
+		resNR = checkNRConvergence();
 #else
 		// Solve and iterate over the system
 		newtonRaphsonDynamic();
@@ -251,19 +257,31 @@ inline double FEMBodyClass::checkNRConvergence () {
 	return sqrt(delU * delU) / (ref_L * sqrt(static_cast<double>(delU.size())));
 }
 
-// Do a sum reduction to get the subiteration residual A CHANGER POUR PIEZO !!!!!
+// Do a sum reduction to get the subiteration residual
 void FEMBodyClass::subResidual() {
 
 	// Get the residual from this time step and reassign old time step value
+#ifdef PIEZO_EFFECT
+	fpPtr->Rp_km1 = fpPtr->Rp_k;
+	fpPtr->Rp_k = fpPtr->X - fpPtr->X_km1;
+#else
 	R_km1 = R_k;
 	R_k = U - U_km1;
-
+#endif
 	// Get residual for this body
+#ifdef PIEZO_EFFECT
+	subRes = fpPtr->Rp_k * fpPtr->Rp_k;
+#else
 	subRes = R_k * R_k;
-
+#endif
 	// Get numerator and denominator for calculating relaxation factor
+#ifdef PIEZO_EFFECT
+	subNum = fpPtr->Rp_km1 * (fpPtr->Rp_k - fpPtr->Rp_km1);
+	subDen = (fpPtr->Rp_k - fpPtr->Rp_km1) * (fpPtr->Rp_k - fpPtr->Rp_km1);
+#else
 	subNum = R_km1 * (R_k - R_km1);
 	subDen = (R_k - R_km1) * (R_k - R_km1);
+#endif
 }
 
 // predictor
