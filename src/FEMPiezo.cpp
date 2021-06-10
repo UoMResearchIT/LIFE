@@ -59,6 +59,7 @@ double FEMPiezoClass::checkNRConvergence () {
 
 // Build global matrices
 void FEMPiezoClass::buildGlobalMatrices() {
+	fPtr->buildGlobalMatrices();
 
 	// Set matrices to zero
 	fill(Mp.begin(), Mp.end(), 0.0);
