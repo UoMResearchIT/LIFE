@@ -45,11 +45,11 @@ const int resFactor = 3;
 #define ENERGIES						// Write out strain energies
 
 // Domain setup (lattice)
-const int Nx = resFactor * 10 * 24 + 1;   	// Number of lattice sites in x-direction
-const int Ny = resFactor * 10 * 15 + 1;		// Number of lattice sites in y-direction
+const int Nx = resFactor * 10 * 10 + 1;   	// Number of lattice sites in x-direction
+const int Ny = resFactor * 10 * 5 + 1;		// Number of lattice sites in y-direction
 
 // Domain setup (physical)
-const double height_p = 0.75;			// Domain height (m)
+const double height_p = 0.2;			// Domain height (m)
 const double rho_p = 1.2047;			// Fluid density (kg/m^3)
 const double nu_p = 0.5e-2;				// Fluid kinematic viscosity (m^2/s)
 
@@ -97,8 +97,8 @@ const double omega = 1.0 / (nu_p * tStep / (pow(1.0 / sqrt(3.0), 2.0) * pow(heig
 
 // Number of time steps and how often to write out
 const int nSteps = static_cast<int>(round(1 / tStep));	// Number of timesteps
-const int tinfo = nSteps / 10000;
-const int tVTK = nSteps / 1;
+const int tinfo = nSteps / 100;
+const int tVTK = nSteps / 20;
 const int tRestart = nSteps / 10;
 
 // Reference values

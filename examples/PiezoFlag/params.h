@@ -97,8 +97,8 @@ const double omega = 1.0 / (nu_p * tStep / (pow(1.0 / sqrt(3.0), 2.0) * pow(heig
 
 // Number of time steps and how often to write out
 const int nSteps = static_cast<int>(round(1 / tStep));	// Number of timesteps
-const int tinfo = nSteps / 10000;
-const int tVTK = nSteps / 1;
+const int tinfo = nSteps / 100;
+const int tVTK = nSteps / 20;
 const int tRestart = nSteps / 10;
 
 // Reference values
