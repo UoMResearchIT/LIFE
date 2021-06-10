@@ -99,7 +99,6 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	K2[dim-3] = -1*piezo_cst; // Non dimensionalised by the Width
 	K2[dim-1] = -1*piezo_cst * (h+hp)/2; // Non dimensionalised by the Width
 		// Build Kp
-	vector<double> Kp;
 	for (size_t i = 0; i < K1.size(); i++) {
 		for (size_t j = 0; j < K1.size(); j++) {
 			Kp[i * piezoDOFs + j] = Km[i * dim + j] + (K1[i]*K1[j] + K2[i]*K2[j])/C;
