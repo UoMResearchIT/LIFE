@@ -269,6 +269,21 @@ void FEMBodyClass::subResidual() {
 // predictor
 void FEMBodyClass::predictor() {
 
+#ifdef PIEZO_EFFECT
+	// Extrapolate the values
+	if (iPtr->oPtr->gPtr->t > 2) {
+		// Do 2rd order extrapolation
+		fpPtr->X = 2.5 * fpPtr->X_n - 2.0 * fpPtr->X_nm1 + 0.5 * fpPtr->X_nm2;
+	}
+	else if (iPtr->oPtr->gPtr->t == 2) {
+		// Do 1st order extrapolation
+		fpPtr->X = 2.0 * fpPtr->X_n - fpPtr->X_nm1;
+	}
+	else if (iPtr->oPtr->gPtr->t == 1) {
+		// Do zeroth order extrapolation
+		fpPtr->X = fpPtr->X_n;
+	}
+#endif
 	// Extrapolate the values
 	if (iPtr->oPtr->gPtr->t > 2) {
 
