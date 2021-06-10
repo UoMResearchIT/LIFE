@@ -41,13 +41,15 @@ void FEMPiezoClass::newtonRaphsonDynamic() {
 	// Update U
 	fPtr->U = X;
 	fPtr->U.pop_back();
+	fPtr->delU = delX;
+	fPtr->delU.pop_back();
 
 	// Update FEM positions
 	fPtr->updateFEMValues();
 }
 
 
-// Check convergence of Newton Raphson iterator
+// Check convergence of Newton Raphson iterator CHANGER LE CALCUL !!!!!!
 double FEMPiezoClass::checkNRConvergence () {
 
 	// Get the norm of delX
