@@ -45,11 +45,11 @@ const int resFactor = 3;
 #define ENERGIES						// Write out strain energies
 
 // Domain setup (lattice)
-const int Nx = resFactor * 10 * 24 + 1;   	// Number of lattice sites in x-direction
-const int Ny = resFactor * 10 * 15 + 1;		// Number of lattice sites in y-direction
+const int Nx = resFactor * 10 * 10 + 1;   	// Number of lattice sites in x-direction
+const int Ny = resFactor * 10 * 5 + 1;		// Number of lattice sites in y-direction
 
 // Domain setup (physical)
-const double height_p = 0.75;			// Domain height (m)
+const double height_p = 0.2;			// Domain height (m)
 const double rho_p = 1.2047;			// Fluid density (kg/m^3)
 const double nu_p = 0.5e-2;				// Fluid kinematic viscosity (m^2/s)
 
