@@ -18,6 +18,7 @@
 
 // Includes
 #include "../inc/FEMBody.h"
+#include "../inc/FEMPiezo.h"
 #include "../inc/Grid.h"
 #include "../inc/Objects.h"
 #include "../inc/Utils.h"

@@ -50,7 +50,7 @@ void FEMPiezoClass::newtonRaphsonDynamic() {
 // Check convergence of Newton Raphson iterator
 inline double FEMPiezoClass::checkNRConvergence () {
 
-	// Get the norm of delU
+	// Get the norm of delX
 	return sqrt(delX * delX) / (ref_L * sqrt(static_cast<double>(delX.size())));
 }
 
@@ -100,12 +100,12 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	K2[dim-1] = -1*piezo_cst * (h+hp)/2; // Non dimensionalised by the Width
 		// Build Kp
 	vector<double> Kp;
-	for (size_t i = 0; i < dim; i++) {
-		for (size_t j = 0; j < dim; j++) {
+	for (size_t i = 0; i < K1.size(); i++) {
+		for (size_t j = 0; j < K1.size(); j++) {
 			Kp[i * piezoDOFs + j] = Km[i * dim + j] + (K1[i]*K1[j] + K2[i]*K2[j])/C;
 		}
 	}
-	for (size_t ij = 0; ij < dim; ij++) {
+	for (size_t ij = 0; ij < K1.size(); ij++) {
 		Kp[(piezoDOFs-1) * piezoDOFs + ij] = (K1[ij] + K2[ij])/C;
 		Kp[ij * piezoDOFs + (piezoDOFs-1)] = (K1[ij] + K2[ij])/C;
 	}
@@ -195,9 +195,13 @@ FEMPiezoClass::FEMPiezoClass(FEMBodyClass *fBodyPtr, double h, double hp, double
 	// Get number of DOFs required for BC
 	bcDOFs = fPtr->bcDOFs;
 
-	// Unpack geometry
-	
-
+	// Unpack parameters
+	h = h;
+	hp = hp;
+	piezo_cst = piezo_cst;
+	dielec_cst = dielec_cst;
+	Rohm = Rohm;
+	L = L;
 	
 
 	// Get number of DOFs in piezobody
