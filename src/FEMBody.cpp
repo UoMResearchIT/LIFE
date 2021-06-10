@@ -56,8 +56,9 @@ void FEMBodyClass::dynamicFEM() {
 		fpPtr->newtonRaphsonDynamic();
 
 		// Check residual
-		//resNR = fpPtr->checkNRConvergence();
-		resNR = checkNRConvergence();
+		resNR = fpPtr->checkNRConvergence();
+		
+		//cout << "itNR:" << itNR << "| resNR:" << resNR << endl;
 #else
 		// Solve and iterate over the system
 		newtonRaphsonDynamic();
@@ -271,6 +272,7 @@ void FEMBodyClass::subResidual() {
 	// Get residual for this body
 #ifdef PIEZO_EFFECT
 	subRes = fpPtr->Rp_k * fpPtr->Rp_k;
+	//cout << "subRes:" << subRes << endl;
 #else
 	subRes = R_k * R_k;
 #endif
