@@ -47,11 +47,6 @@ void FEMPiezoClass::newtonRaphsonDynamic() {
 	// Add deltaU to X
 	X = X + delX;
 
-	cout << endl << "delX: ";
-	for(size_t i; i < delX.size(); i++){
-		cout << delX[i] << ",";
-	}
-
 	// Update U
 	fPtr->U = X;
 	fPtr->U.pop_back();
@@ -140,11 +135,6 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	for (size_t i = 0; i < R.size(); i++) {
 		Rp[i] = R[i];
 	}
-
-	cout << endl << "Rp: ";
-	for(size_t i; i < Rp.size(); i++){
-		cout << Rp[i] << ",";
-	}
 }
 
 
@@ -162,34 +152,9 @@ void FEMPiezoClass::setNewmark() {
 	a12 = delta / alpha;
 	a13 = Dt * delta * a3;
 
-	cout << endl << "Fp: ";
-	for(size_t i; i < Fp.size(); i++){
-		cout << Fp[i] << ",";
-	}
-
-	cout << endl << "X: ";
-	for(size_t i; i < X.size(); i++){
-		cout << X[i] << ",";
-	}
-
-	cout << endl << "Xdot: ";
-	for(size_t i; i < X.size(); i++){
-		cout << Xdot[i] << ",";
-	}
-
-	cout << endl << "Xdotdot: ";
-	for(size_t i; i < X.size(); i++){
-		cout << Xdotdot[i] << ",";
-	}
-
 	// Calculate effective load vector
 	Fp = Rp - Fp + Utils::MatMultiply(Mp, a0 * (X_n - X) + a2 * Xdot + a3 * Xdotdot)
-				 + Utils::MatMultiply(Dp, (1 - a12) * Xdot + (a9 - a13) * Xdotdot - a11 * X);
-
-	cout << endl << "FpN: ";
-	for(size_t i; i < Fp.size(); i++){
-		cout << Fp[i] << ",";
-	}
+				 - Utils::MatMultiply(Dp, (1 - a12) * Xdot + (a9 - a13) * Xdotdot - a11 * (X_n - X));
 
 	// Calculate effective stiffness matrix
 	Kp = Kp + a0 * Mp + a11 * Dp;
