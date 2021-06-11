@@ -42,7 +42,7 @@ const double uy0_p = 0.0;				// Initial y-velocity (m/s)
 
 // Gravity and pressure gradient
 const double gravityX = 0.0;			// Gravity component in x-direction (m/s^2)
-const double gravityY = 10.0;			// Gravity component in y-direction (m/s^2)
+const double gravityY = -200.0;			// Gravity component in y-direction (m/s^2)
 const double dpdx = 0.0;				// Pressure gradient in x-direction (Pa/m)
 const double dpdy = 0.0;				// Pressure gradient in x-direction (Pa/m)
 
@@ -79,9 +79,9 @@ const double omega = 1.0 / (nu_p * tStep / (pow(1.0 / sqrt(3.0), 2.0) * pow(heig
 //const double omega = 1.0 / (uLB * (Ny-1) / (uxInlet_p * height_p / (3.0 * nu_p)) + 0.5);
 
 // Number of time steps and how often to write out
-const int nSteps = 100;	//static_cast<int>(round(1 / tStep));	// Number of timesteps
-const int tinfo = 1;	//nSteps / 1000;						// Frequency to write out info and logs
-const int tVTK = 1;		//nSteps / 1000;						// Frequency to write out VTK
+const int nSteps = static_cast<int>(round(0.1 / tStep));	// Number of timesteps
+const int tinfo = nSteps / 1000;						// Frequency to write out info and logs
+const int tVTK = nSteps / 200;						// Frequency to write out VTK
 const int tRestart = nSteps / 1;								// Frequency to write out restart files
 
 // Reference values
