@@ -49,7 +49,7 @@ void FEMPiezoClass::newtonRaphsonDynamic() {
 }
 
 
-// Check convergence of Newton Raphson iterator CHANGER LE CALCUL !!!!!!
+// Check convergence of Newton Raphson iterator
 double FEMPiezoClass::checkNRConvergence () {
 
 	// Get the norm of delX
@@ -67,7 +67,7 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	fill(Kp.begin(), Kp.end(), 0.0);
 	fill(Fp.begin(), Fp.end(), 0.0);
 
-	// Build global matrices Mp
+	// Build global matrices Mp : Defined in the paper of O.Thomas (2009) Eq 61a
 	vector<double> Mm = fPtr->M;
 		// Copy of Mm
 	int dim = fPtr->bodyDOFs;
@@ -79,14 +79,15 @@ void FEMPiezoClass::buildGlobalMatrices() {
 		// Add piezo characteristic
 	Mp[piezoDOFs * piezoDOFs -1] = L;
 
-	// Build global matrices Dp
+	// Build global matrices Dp : Defined in the paper of O.Thomas (2009) Eq 61a
 	Dp[piezoDOFs * piezoDOFs -1] = Rohm;
 
-	// Build global matrices Kp
+	// Build global matrices Kp : Defined in the paper of O.Thomas (2009) Eq 61b
 	vector<double> Km = fPtr->K;
 		// Build C
-	double C = dielec_cst * fPtr->L0 / hp; // Non dimensionalised by the Width
+	double C = dielec_cst * fPtr->L0 / hp; // Defined in the paper of O.Thomas (2009) Eq 57 and Non dimensionalised by the Width
 		// Build K1 and K2 (with the hyp of one patch over all the length on each side and for a single flag)
+		// Defined in the paper of O.Thomas (2009) Eq A7
 	vector<double> K1;
 	vector<double> K2;
 	K1.resize(dim, 0.0);
@@ -123,7 +124,7 @@ void FEMPiezoClass::buildGlobalMatrices() {
 		cout << K2[i] << ",";
 	}
 */
-	// Build global matrices Fp
+	// Build global matrices Fp : Defined in the paper of O.Thomas (2009) Eq 61b
 	vector<double> F = fPtr->F;
 		// Copy of F
 	for (size_t i = 0; i < F.size(); i++) {
