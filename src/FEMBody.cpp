@@ -69,12 +69,7 @@ void FEMBodyClass::dynamicFEM() {
 
 		//cout << endl << "itNR: " << itNR << "resNR: " << resNR << endl << endl;
 	} while (resNR > TOL && itNR < MAXIT);
-/*
-	cout << endl << "U: ";
-	for(size_t i; i < U.size(); i++){
-		cout << U[i] << ",";
-	}
-*/
+
 	// Compute new velocities and accelerations
 #ifdef PIEZO_EFFECT
 	fpPtr->finishNewmark();

@@ -31,15 +31,6 @@ void FEMPiezoClass::newtonRaphsonDynamic() {
 
 	// Apply Newmark scheme (using Newmark coefficients)
 	setNewmark();
-/*
-	cout << endl << endl << "Kp: ";
-	for(size_t i = 0; i < piezoDOFs; i++){
-		cout << endl;
-		for(size_t j = 0; j < piezoDOFs; j++){
-			cout << Kp[j * piezoDOFs + i] << ",";
-		}
-	}
-*/
 
 	// Solve linear system using LAPACK library
 	delX = Utils::solveLAPACK(Kp, Fp, bcDOFs);
