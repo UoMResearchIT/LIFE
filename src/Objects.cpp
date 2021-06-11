@@ -49,6 +49,8 @@ void ObjectsClass::objectKernel() {
 		// Increase subIt
 		subIt++;
 
+		//cout << endl << "subIt:" << subIt <<" | subRes:" << subRes << endl << endl;
+
 	} while (subIt < MAXIT && subRes > subTol);
 
 	// Do IBM spreading step
@@ -209,6 +211,9 @@ void ObjectsClass::recomputeObjectVals() {
 
 					// Set previous iteration value
 					iBody[ib].sBody->U_km1.swap(iBody[ib].sBody->U);
+#ifdef PIEZO_EFFECT
+					iBody[ib].sBody->fpPtr->X_km1.swap(iBody[ib].sBody->fpPtr->X);
+#endif
 				}
 			}
 		}
