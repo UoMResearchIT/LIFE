@@ -156,7 +156,7 @@ void FEMPiezoClass::setNewmark() {
 
 	// Calculate effective load vector
 	Fp = Rp - Fp + Utils::MatMultiply(Mp, a0 * (X_n - X) + a2 * Xdot + a3 * Xdotdot)
-				 + Utils::MatMultiply(Dp, (1 - a12) * Xdot + (a9 - a13) * Xdotdot - a11 * X);
+				 - Utils::MatMultiply(Dp, (1 - a12) * Xdot + (a9 - a13) * Xdotdot - a11 * (X_n - X));
 
 	// Calculate effective stiffness matrix
 	Kp = Kp + a0 * Mp + a11 * Dp;
