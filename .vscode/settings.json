@@ -14,6 +14,7 @@
         "streambuf": "cpp",
         "string_view": "cpp",
         "ratio": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "ostream": "cpp"
     }
 }

@@ -17,7 +17,7 @@ const int resFactor = 3;
 //#define WOMERSLEY 5.0				// Womersley number for oscillating pressure gradients
 //#define UNI_EPSILON				// Calculate epsilon over all IBM bodies at once
 #define ORDERED						// For deterministic reduction operations
-#define INITIAL_DEFLECT 0.01		// Set an initial deflection (fraction of L)
+//#define INITIAL_DEFLECT 0.01		// Set an initial deflection (fraction of L)
 #define PIEZO_EFFECT
 
 // Outputs
