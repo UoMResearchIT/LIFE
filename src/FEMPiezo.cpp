@@ -113,6 +113,16 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	}
 	Kp[piezoDOFs*piezoDOFs-1] = 2/C;
 
+/*
+	cout << endl << "K1" << endl;
+	for (size_t i = 0; i < K1.size(); i++) {
+		cout << K1[i] << ",";
+	}
+	cout << endl << "K2" << endl;
+	for (size_t i = 0; i < K2.size(); i++) {
+		cout << K2[i] << ",";
+	}
+*/
 	// Build global matrices Fp
 	vector<double> F = fPtr->F;
 		// Copy of F
@@ -198,13 +208,12 @@ FEMPiezoClass::FEMPiezoClass(FEMBodyClass *fBodyPtr, double h, double hp, double
 	bcDOFs = fPtr->bcDOFs;
 
 	// Unpack parameters
-	h = h;
-	hp = hp;
-	piezo_cst = piezo_cst;
-	dielec_cst = dielec_cst;
-	Rohm = Rohm;
-	L = L;
-	
+	this->h = h;
+	this->hp = hp;
+	this->piezo_cst = piezo_cst;
+	this->dielec_cst = dielec_cst;
+	this->Rohm = Rohm;
+	this->L = L;
 
 	// Get number of DOFs in piezobody
 	piezoDOFs = fPtr->bodyDOFs + 1; // Add in function of the number of flags
