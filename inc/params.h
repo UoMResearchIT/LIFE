@@ -6,7 +6,7 @@
 #include "defs.h"
 
 // Set number of OMP threads (if commented then it will use system max)
-#define THREADS 1
+//#define THREADS 1
 
 // Set resFactor (for easily changing mesh resolution)
 const int resFactor = 3;
@@ -79,7 +79,7 @@ const double omega = 1.0 / (nu_p * tStep / (pow(1.0 / sqrt(3.0), 2.0) * pow(heig
 //const double omega = 1.0 / (uLB * (Ny-1) / (uxInlet_p * height_p / (3.0 * nu_p)) + 0.5);
 
 // Number of time steps and how often to write out
-const int nSteps = 100;	//static_cast<int>(round(1 / tStep));	// Number of timesteps
+const int nSteps = 41;	//static_cast<int>(round(1 / tStep));	// Number of timesteps
 const int tinfo = 1;	//nSteps / 1000;						// Frequency to write out info and logs
 const int tVTK = 1;		//nSteps / 1000;						// Frequency to write out VTK
 const int tRestart = nSteps / 1;								// Frequency to write out restart files

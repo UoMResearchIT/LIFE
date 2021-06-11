@@ -56,8 +56,7 @@ void FEMBodyClass::dynamicFEM() {
 		fpPtr->newtonRaphsonDynamic();
 
 		// Check residual
-		//resNR = fpPtr->checkNRConvergence();
-		resNR = checkNRConvergence();
+		resNR = fpPtr->checkNRConvergence();
 #else
 		// Solve and iterate over the system
 		newtonRaphsonDynamic();
@@ -68,7 +67,13 @@ void FEMBodyClass::dynamicFEM() {
 		// Increment counter
 		itNR++;
 
+		cout << endl << "itNR: " << itNR << "resNR: " << resNR << endl << endl;
 	} while (resNR > TOL && itNR < MAXIT);
+
+	cout << endl << "U: ";
+	for(size_t i; i < U.size(); i++){
+		cout << U[i] << ",";
+	}
 
 	// Compute new velocities and accelerations
 #ifdef PIEZO_EFFECT

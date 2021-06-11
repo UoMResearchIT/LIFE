@@ -6,7 +6,7 @@
 #include "defs.h"
 
 // Set number of OMP threads (if commented then it will use system max)
-//#define THREADS 2
+//#define THREADS 1
 
 // Set resFactor (for easily changing mesh resolution)
 const int resFactor = 3;
@@ -17,7 +17,7 @@ const int resFactor = 3;
 //#define WOMERSLEY 5.0				// Womersley number for oscillating pressure gradients
 //#define UNI_EPSILON				// Calculate epsilon over all IBM bodies at once
 #define ORDERED						// For deterministic reduction operations
-#define INITIAL_DEFLECT 0.01		// Set an initial deflection (fraction of L)
+//#define INITIAL_DEFLECT 0.01		// Set an initial deflection (fraction of L)
 #define PIEZO_EFFECT
 
 // Outputs
@@ -79,10 +79,10 @@ const double omega = 1.0 / (nu_p * tStep / (pow(1.0 / sqrt(3.0), 2.0) * pow(heig
 //const double omega = 1.0 / (uLB * (Ny-1) / (uxInlet_p * height_p / (3.0 * nu_p)) + 0.5);
 
 // Number of time steps and how often to write out
-const int nSteps = static_cast<int>(round(1 / tStep));	// Number of timesteps
-const int tinfo = nSteps / 1000;								// Frequency to write out info and logs
-const int tVTK = nSteps / 10;								// Frequency to write out VTK
-const int tRestart = nSteps / 10;							// Frequency to write out restart files
+const int nSteps = 41;	//static_cast<int>(round(1 / tStep));	// Number of timesteps
+const int tinfo = 1;	//nSteps / 1000;						// Frequency to write out info and logs
+const int tVTK = 1;		//nSteps / 1000;						// Frequency to write out VTK
+const int tRestart = nSteps / 1;								// Frequency to write out restart files
 
 // Reference values
 const double ref_nu = nu_p;			// Reference kinematic viscosity (m^2/s)

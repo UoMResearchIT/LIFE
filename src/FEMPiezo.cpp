@@ -31,12 +31,26 @@ void FEMPiezoClass::newtonRaphsonDynamic() {
 
 	// Apply Newmark scheme (using Newmark coefficients)
 	setNewmark();
+/*
+	cout << endl << endl << "Kp: ";
+	for(size_t i = 0; i < piezoDOFs; i++){
+		cout << endl;
+		for(size_t j = 0; j < piezoDOFs; j++){
+			cout << Kp[j * piezoDOFs + i] << ",";
+		}
+	}
+*/
 
 	// Solve linear system using LAPACK library
 	delX = Utils::solveLAPACK(Kp, Fp, bcDOFs);
 
 	// Add deltaU to X
 	X = X + delX;
+
+	cout << endl << "delX: ";
+	for(size_t i; i < delX.size(); i++){
+		cout << delX[i] << ",";
+	}
 
 	// Update U
 	fPtr->U = X;
@@ -126,6 +140,11 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	for (size_t i = 0; i < R.size(); i++) {
 		Rp[i] = R[i];
 	}
+
+	cout << endl << "Rp: ";
+	for(size_t i; i < Rp.size(); i++){
+		cout << Rp[i] << ",";
+	}
 }
 
 
@@ -143,9 +162,34 @@ void FEMPiezoClass::setNewmark() {
 	a12 = delta / alpha;
 	a13 = Dt * delta * a3;
 
+	cout << endl << "Fp: ";
+	for(size_t i; i < Fp.size(); i++){
+		cout << Fp[i] << ",";
+	}
+
+	cout << endl << "X: ";
+	for(size_t i; i < X.size(); i++){
+		cout << X[i] << ",";
+	}
+
+	cout << endl << "Xdot: ";
+	for(size_t i; i < X.size(); i++){
+		cout << Xdot[i] << ",";
+	}
+
+	cout << endl << "Xdotdot: ";
+	for(size_t i; i < X.size(); i++){
+		cout << Xdotdot[i] << ",";
+	}
+
 	// Calculate effective load vector
 	Fp = Rp - Fp + Utils::MatMultiply(Mp, a0 * (X_n - X) + a2 * Xdot + a3 * Xdotdot)
 				 + Utils::MatMultiply(Dp, (1 - a12) * Xdot + (a9 - a13) * Xdotdot - a11 * X);
+
+	cout << endl << "FpN: ";
+	for(size_t i; i < Fp.size(); i++){
+		cout << Fp[i] << ",";
+	}
 
 	// Calculate effective stiffness matrix
 	Kp = Kp + a0 * Mp + a11 * Dp;
@@ -198,12 +242,12 @@ FEMPiezoClass::FEMPiezoClass(FEMBodyClass *fBodyPtr, double h, double hp, double
 	bcDOFs = fPtr->bcDOFs;
 
 	// Unpack parameters
-	h = h;
-	hp = hp;
-	piezo_cst = piezo_cst;
-	dielec_cst = dielec_cst;
-	Rohm = Rohm;
-	L = L;
+	this->h = h;
+	this->hp = hp;
+	this->piezo_cst = piezo_cst;
+	this->dielec_cst = dielec_cst;
+	this->Rohm = Rohm;
+	this->L = L;
 	
 
 	// Get number of DOFs in piezobody
