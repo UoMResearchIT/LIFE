@@ -26,6 +26,7 @@ const int resFactor = 3;
 #define FORCES							// Write out forces on structures
 #define TIPS							// Write out tip positions
 #define ENERGIES						// Write out Strain Energies
+#define CHARGES							// Write out Charges
 
 // Domain setup (lattice)
 const int Nx = resFactor * 10 * 10 + 1;   	// Number of lattice sites in x-direction

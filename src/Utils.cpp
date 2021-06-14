@@ -138,6 +138,10 @@ void Utils::writeInfo(GridClass &grid) {
 #ifdef ENERGIES
 	grid.oPtr->writeEnergies();
 #endif
+	// Write out Charges
+#ifdef CHARGES
+	grid.oPtr->writeCharges();
+#endif
 }
 
 // Write log

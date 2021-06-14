@@ -80,6 +80,7 @@ public:
 	void writeTotalForces();				// Write out forces on bodies
 	void writeTips();						// Write out tip positions
 	void writeEnergies();					// Write out strain energies
+	void writeCharges();					// Write out strain energies
 	void writeRestart();					// Write restart file
 	void readRestart();						// Read restart file
 

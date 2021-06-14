@@ -677,6 +677,50 @@ void ObjectsClass::writeEnergies() {
 	}
 }
 
+// Write out Q
+void ObjectsClass::writeCharges() {
+
+	// Only write if there are FEM bodies
+	if (hasFlex == true) {
+
+		// File names
+		string fnameQ = "Results/Charges.out";
+
+		// Check if files already exist
+		bool existingQ = false;
+		if (boost::filesystem::exists(fnameQ))
+			existingQ = true;
+		
+		// Open the file
+		ofstream outputQ;
+		outputQ.open(fnameQ.c_str(), ios::app);
+		outputQ.precision(PRECISION);
+
+		// Handle failure to open
+		if (!outputQ.is_open())
+			ERROR("Error opening tip positions/velocities files...exiting");
+
+		// Write out header
+		if (existingQ == false)
+			outputQ << "Timestep\tTime (s)\tQ";
+		
+		// Write out
+		outputQ << endl << gPtr->t << "\t" << gPtr->Dt * gPtr->t;
+
+		// Now loop through all flexible bodies
+		for (size_t ib = 0; ib < iBody.size(); ib++) {
+
+			// Only do if flexible
+			if (iBody[ib].flex == eFlexible) {
+				outputQ << "\t" << iBody[ib].sBody->fpPtr->X[iBody[ib].sBody->fpPtr->X.size()-1];
+			}
+		}
+
+		// Close file
+		outputQ.close();
+	}
+}
+
 // Write info data at tInfo frequency
 void ObjectsClass::writeInfo() {
 
