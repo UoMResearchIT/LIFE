@@ -179,6 +179,12 @@ void FEMPiezoClass::finishNewmark() {
 	// Update velocities and accelerations
 	Xdotdot = a6 * (X - X_n) + a7 * Xdot_n + a8 * Xdotdot_n;
 	Xdot = Xdot_n + a9 * Xdotdot_n + a10 * Xdotdot;
+
+	// Update U
+	fPtr->Udotdot = Xdotdot;
+	fPtr->Udotdot.pop_back();
+	fPtr->Udot = Xdot;
+	fPtr->Udot.pop_back();
 }
 
 
