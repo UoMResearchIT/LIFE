@@ -49,7 +49,7 @@ void FEMPiezoClass::newtonRaphsonDynamic() {
 }
 
 
-// Check convergence of Newton Raphson iterator CHANGER LE CALCUL !!!!!!
+// Check convergence of Newton Raphson iterator
 double FEMPiezoClass::checkNRConvergence () {
 
 	// Get the norm of delX
@@ -67,7 +67,7 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	fill(Kp.begin(), Kp.end(), 0.0);
 	fill(Fp.begin(), Fp.end(), 0.0);
 
-	// Build global matrices Mp
+	// Build global matrices Mp : Defined in the paper of O.Thomas (2009) Eq 61a
 	vector<double> Mm = fPtr->M;
 		// Copy of Mm
 	int dim = fPtr->bodyDOFs;
@@ -79,14 +79,15 @@ void FEMPiezoClass::buildGlobalMatrices() {
 		// Add piezo characteristic
 	Mp[piezoDOFs * piezoDOFs -1] = L;
 
-	// Build global matrices Dp
+	// Build global matrices Dp : Defined in the paper of O.Thomas (2009) Eq 61a
 	Dp[piezoDOFs * piezoDOFs -1] = Rohm;
 
-	// Build global matrices Kp
+	// Build global matrices Kp : Defined in the paper of O.Thomas (2009) Eq 61b
 	vector<double> Km = fPtr->K;
 		// Build C
-	double C = dielec_cst * fPtr->L0 / hp; // Non dimensionalised by the Width
+	double C = dielec_cst * fPtr->L0 / hp; // Defined in the paper of O.Thomas (2009) Eq 57 and Non dimensionalised by the Width
 		// Build K1 and K2 (with the hyp of one patch over all the length on each side and for a single flag)
+		// Defined in the paper of O.Thomas (2009) Eq A7
 	vector<double> K1;
 	vector<double> K2;
 	K1.resize(dim, 0.0);
@@ -117,10 +118,11 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	vector<double> F = fPtr->F;
 		// Copy of F
 	for (size_t i = 0; i < F.size(); i++) {
-		Fp[i] = F[i];
+		Fp[i] = F[i] + X[piezoDOFs-1] * (K1[i] + K2[i])/C;
 	}
+	Fp[piezoDOFs-1] = 2 * X[piezoDOFs-1]/C;
 
-	// Build global matrices Rp
+	// Build global matrices Rp : Defined in the paper of O.Thomas (2009) Eq 61b
 	vector<double> R = fPtr->R;
 		// Copy of R
 	for (size_t i = 0; i < R.size(); i++) {
@@ -134,18 +136,17 @@ void FEMPiezoClass::setNewmark() {
 
 	// Newmark-beta method for time integration
 	double Dt = fPtr->iPtr->oPtr->gPtr->Dt;
-	double a0, a2, a3, a11, a9, a12, a13;
+	double a0, a2, a3, a11, a12, a13;
 	a0 = 1.0 / (alpha * SQ(Dt));
 	a2 = 1.0 / (alpha * Dt);
 	a3 = 1.0 / (2.0 * alpha) - 1.0;
-	a9 = Dt * (1.0 - delta);
 	a11 = delta / (alpha * Dt);
-	a12 = delta / alpha;
-	a13 = Dt * delta * a3;
+	a12 = (delta / alpha) - 1;
+	a13 = Dt * (delta/(2*alpha) -1);
 
 	// Calculate effective load vector
 	Fp = Rp - Fp + Utils::MatMultiply(Mp, a0 * (X_n - X) + a2 * Xdot + a3 * Xdotdot)
-				 - Utils::MatMultiply(Dp, (1 - a12) * Xdot + (a9 - a13) * Xdotdot - a11 * (X_n - X));
+				 + Utils::MatMultiply(Dp, a11 * (X_n - X) + a12 * Xdot + a13 * Xdotdot);
 
 	// Calculate effective stiffness matrix
 	Kp = Kp + a0 * Mp + a11 * Dp;
@@ -168,6 +169,12 @@ void FEMPiezoClass::finishNewmark() {
 	// Update velocities and accelerations
 	Xdotdot = a6 * (X - X_n) + a7 * Xdot_n + a8 * Xdotdot_n;
 	Xdot = Xdot_n + a9 * Xdotdot_n + a10 * Xdotdot;
+
+	// Update U
+	fPtr->Udotdot = Xdotdot;
+	fPtr->Udotdot.pop_back();
+	fPtr->Udot = Xdot;
+	fPtr->Udot.pop_back();
 }
 
 
@@ -204,7 +211,6 @@ FEMPiezoClass::FEMPiezoClass(FEMBodyClass *fBodyPtr, double h, double hp, double
 	this->dielec_cst = dielec_cst;
 	this->Rohm = Rohm;
 	this->L = L;
-	
 
 	// Get number of DOFs in piezobody
 	piezoDOFs = fPtr->bodyDOFs + 1; // Add in function of the number of flags
