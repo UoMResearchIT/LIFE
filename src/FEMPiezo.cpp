@@ -114,24 +114,15 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	}
 	Kp[piezoDOFs*piezoDOFs-1] = 2/C;
 
-/*
-	cout << endl << "K1" << endl;
-	for (size_t i = 0; i < K1.size(); i++) {
-		cout << K1[i] << ",";
-	}
-	cout << endl << "K2" << endl;
-	for (size_t i = 0; i < K2.size(); i++) {
-		cout << K2[i] << ",";
-	}
-*/
-	// Build global matrices Fp : Defined in the paper of O.Thomas (2009) Eq 61b
+	// Build global matrices Fp
 	vector<double> F = fPtr->F;
 		// Copy of F
 	for (size_t i = 0; i < F.size(); i++) {
-		Fp[i] = F[i];
+		Fp[i] = F[i] + X[piezoDOFs-1] * (K1[i] + K2[i])/C;
 	}
+	Fp[piezoDOFs-1] = 2 * X[piezoDOFs-1]/C;
 
-	// Build global matrices Rp
+	// Build global matrices Rp : Defined in the paper of O.Thomas (2009) Eq 61b
 	vector<double> R = fPtr->R;
 		// Copy of R
 	for (size_t i = 0; i < R.size(); i++) {
@@ -145,18 +136,17 @@ void FEMPiezoClass::setNewmark() {
 
 	// Newmark-beta method for time integration
 	double Dt = fPtr->iPtr->oPtr->gPtr->Dt;
-	double a0, a2, a3, a11, a9, a12, a13;
+	double a0, a2, a3, a11, a12, a13;
 	a0 = 1.0 / (alpha * SQ(Dt));
 	a2 = 1.0 / (alpha * Dt);
 	a3 = 1.0 / (2.0 * alpha) - 1.0;
-	a9 = Dt * (1.0 - delta);
 	a11 = delta / (alpha * Dt);
-	a12 = delta / alpha;
-	a13 = Dt * delta * a3;
+	a12 = (delta / alpha) - 1;
+	a13 = Dt * (delta/(2*alpha) -1);
 
 	// Calculate effective load vector
 	Fp = Rp - Fp + Utils::MatMultiply(Mp, a0 * (X_n - X) + a2 * Xdot + a3 * Xdotdot)
-				 - Utils::MatMultiply(Dp, (1 - a12) * Xdot + (a9 - a13) * Xdotdot - a11 * (X_n - X));
+				 + Utils::MatMultiply(Dp, a11 * (X_n - X) + a12 * Xdot + a13 * Xdotdot);
 
 	// Calculate effective stiffness matrix
 	Kp = Kp + a0 * Mp + a11 * Dp;
