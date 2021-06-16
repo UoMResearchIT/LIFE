@@ -32,6 +32,7 @@ class FEMPiezoClass {
 
     // Friend classes
     friend class FEMBodyClass;
+    friend class FEMElementClass;
     friend class ObjectsClass;
 
 // Default constructor and destructor

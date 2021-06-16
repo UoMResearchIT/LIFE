@@ -118,9 +118,8 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	vector<double> F = fPtr->F;
 		// Copy of F
 	for (size_t i = 0; i < F.size(); i++) {
-		Fp[i] = F[i] + X[piezoDOFs-1] * (K1[i] + K2[i])/C;
+		Fp[i] = F[i];
 	}
-	Fp[piezoDOFs-1] = 2 * X[piezoDOFs-1]/C;
 
 	// Build global matrices Rp : Defined in the paper of O.Thomas (2009) Eq 61b
 	vector<double> R = fPtr->R;

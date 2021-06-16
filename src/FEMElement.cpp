@@ -92,6 +92,43 @@ void FEMElementClass::forceVector() {
 	// Get element internal forces
 	array<double, elementDOFs> FGlobal = Utils::Transpose(T) * F;
 
+#ifdef PIEZO_EFFECT
+	// Calculate the displacements
+	double ui = node[0]->pos[eX];
+	double vi = node[0]->pos[eY];
+	double thetai = node[0]->angle;
+	double uj = node[1]->pos[eX];
+	double vj = node[1]->pos[eY];
+	double thetaj = node[1]->angle;
+	double tm = (thetai+thetaj)/2;
+
+	// Calculate B
+	array<array<double, elementDOFs>, 2> B;
+	B[0][0] = - cos(tm)/L0;
+	B[1][0] = - sin(tm)/L0;
+	B[2][0] = ( -(1+(uj-ui)/L0)*sin(tm) + ((vj-vi)/L0)*cos(tm) )/2;
+	B[3][0] = cos(tm)/L0;
+	B[4][0] = sin(tm)/L0;
+	B[5][0] = ( -(1+(uj-ui)/L0)*sin(tm) + ((vj-vi)/L0)*cos(tm) )/2;
+	B[0][1] = 0;
+	B[1][1] = 0;
+	B[2][1] = -1/L0;
+	B[3][1] = 0;
+	B[4][1] = 0;
+	B[5][1] = 1/L0;
+
+	// Calculate Parameters
+	double G0 = fPtr->fpPtr->piezo_cst;
+	double G1 = fPtr->fpPtr->piezo_cst * (fPtr->fpPtr->h+fPtr->fpPtr->hp)/2;
+	array<double, 2> G;
+	G[0] = G0;
+	G[1] = G1;
+	double V = - fPtr->fpPtr->Rohm * fPtr->fpPtr->Xdot[fPtr->fpPtr->Xdot.size()-1];
+
+	// Add the piezo internal forces
+	FGlobal = FGlobal + L0 * V * Utils::Transpose(B) * G;
+
+#endif
 	// Assemble into global vector
 	assembleGlobalMat(FGlobal, fPtr->F);
 }
