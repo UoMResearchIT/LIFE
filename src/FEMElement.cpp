@@ -91,7 +91,7 @@ void FEMElementClass::forceVector() {
 
 	// Get element internal forces
 	array<double, elementDOFs> FGlobal = Utils::Transpose(T) * F;
-/*
+
 #ifdef PIEZO_EFFECT
 	// Calculate Parameters
 	double G0 = fPtr->fpPtr->piezo_cst;
@@ -102,9 +102,9 @@ void FEMElementClass::forceVector() {
 	double Q = fPtr->fpPtr->Xdot[fPtr->fpPtr->Xdot.size()-1];
 
 	// Add the piezo internal forces
-	FGlobal = FGlobal + L0 * Q * B * Gc1 + L0 * Q * B * Gc2;
+	FGlobal = FGlobal + L0 * V * B * Gc1 + L0 * V * B * Gc2;
 #endif
-*/
+
 	// Assemble into global vector
 	assembleGlobalMat(FGlobal, fPtr->F);
 }
@@ -328,7 +328,7 @@ void FEMElementClass::setElementTransform() {
 // Set transformation matrix for element
 void FEMElementClass::setB() {
 
-/*
+
 	// Calculate the displacements
 	double ui = node[0]->pos[eX];
 	double vi = node[0]->pos[eY];
@@ -351,13 +351,14 @@ void FEMElementClass::setB() {
 	B[3][1] = 0;
 	B[4][1] = 0;
 	B[5][1] = 1/L0;
-*/
 
+/*
 	// Calculate Blin
 	B[0][0] = -1/L0;
 	B[3][0] = 1/L0;
 	B[2][1] = 1/L0;
 	B[5][1] = -1/L0;
+*/
 }
 
 // Custom constructor for building elements
