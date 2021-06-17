@@ -86,22 +86,7 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	vector<double> Km = fPtr->K;
 		// Build C
 	double C = dielec_cst * fPtr->L0 / hp; // Defined in the paper of O.Thomas (2009) Eq 57 and Non dimensionalised by the Width
-		// Build K1 and K2 (with the hyp of one patch over all the length on each side and for a single flag)
-		// Defined in the paper of O.Thomas (2009) Eq A7
-	vector<double> K1;
-	vector<double> K2;
-	K1.resize(dim, 0.0);
-	K2.resize(dim, 0.0);
-
-	K1[0] = -1*piezo_cst; // Non dimensionalised by the Width
-	K1[2] = piezo_cst * (h+hp)/2; // Non dimensionalised by the Width
-	K1[dim-3] = piezo_cst; // Non dimensionalised by the Width
-	K1[dim-1] = -1*piezo_cst * (h+hp)/2; // Non dimensionalised by the Width
-
-	K2[0] = piezo_cst; // Non dimensionalised by the Width
-	K2[2] = piezo_cst * (h+hp)/2; // Non dimensionalised by the Width
-	K2[dim-3] = -1*piezo_cst; // Non dimensionalised by the Width
-	K2[dim-1] = -1*piezo_cst * (h+hp)/2; // Non dimensionalised by the Width
+	
 		// Build Kp
 	for (size_t i = 0; i < K1.size(); i++) {
 		for (size_t j = 0; j < K1.size(); j++) {
@@ -218,6 +203,8 @@ FEMPiezoClass::FEMPiezoClass(FEMBodyClass *fBodyPtr, double h, double hp, double
 	Mp.resize(piezoDOFs * piezoDOFs, 0.0);
 	Dp.resize(piezoDOFs * piezoDOFs, 0.0);
 	Kp.resize(piezoDOFs * piezoDOFs, 0.0);
+	K1.resize(fPtr->bodyDOFs, 0.0);
+	K2.resize(fPtr->bodyDOFs, 0.0);
 	Rp.resize(piezoDOFs, 0.0);
 	Fp.resize(piezoDOFs, 0.0);
 	X.resize(piezoDOFs, 0.0);

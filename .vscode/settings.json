@@ -15,6 +15,11 @@
         "string_view": "cpp",
         "ratio": "cpp",
         "array": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "type_traits": "cpp",
+        "optional": "cpp",
+        "new": "cpp",
+        "cmath": "cpp",
+        "utility": "cpp"
     }
 }

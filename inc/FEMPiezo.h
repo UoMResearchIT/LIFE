@@ -71,6 +71,8 @@ private:
     vector<double> Mp;						// Mass matrix
     vector<double> Dp;						// Damping matrix
 	vector<double> Kp;						// Stiffness matrix
+    vector<double> K1;
+	vector<double> K2;
     vector<double> Rp;						// Load vector
     vector<double> Fp;						// Vector of internal forces
     vector<double> X;						// Vector of unknown

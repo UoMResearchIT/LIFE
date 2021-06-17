@@ -101,7 +101,7 @@ void FEMElementClass::forceVector() {
 	double vj = node[1]->pos[eY];
 	double thetaj = node[1]->angle;
 	double tm = (thetai+thetaj)/2;
-
+/*
 	// Calculate B
 	array<array<double, elementDOFs>, 2> B;
 	B[0][0] = - cos(tm)/L0;
@@ -116,18 +116,26 @@ void FEMElementClass::forceVector() {
 	B[3][1] = 0;
 	B[4][1] = 0;
 	B[5][1] = 1/L0;
+*/
+/*
+	// Calculate Blin
+	array<array<double, elementDOFs>, 2> B;
+	B[0][0] = -1/L0;
+	B[3][0] = 1/L0;
+	B[2][1] = 1/L0;
+	B[5][1] = -1/L0;
 
 	// Calculate Parameters
 	double G0 = fPtr->fpPtr->piezo_cst;
 	double G1 = fPtr->fpPtr->piezo_cst * (fPtr->fpPtr->h+fPtr->fpPtr->hp)/2;
-	array<double, 2> G;
-	G[0] = G0;
-	G[1] = G1;
+	array<double, 2> Gc1 = {G0, G1};
+	array<double, 2> Gc2 = {-G0, G1};
 	double V = - fPtr->fpPtr->Rohm * fPtr->fpPtr->Xdot[fPtr->fpPtr->Xdot.size()-1];
+	double Q = fPtr->fpPtr->Xdot[fPtr->fpPtr->Xdot.size()-1];
 
 	// Add the piezo internal forces
-	FGlobal = FGlobal + L0 * V * Utils::Transpose(B) * G;
-
+	FGlobal = FGlobal + L0 * Q * Utils::Transpose(B) * Gc1 + L0 * Q * Utils::Transpose(B) * Gc2;
+*/
 #endif
 	// Assemble into global vector
 	assembleGlobalMat(FGlobal, fPtr->F);
@@ -169,9 +177,91 @@ void FEMElementClass::stiffMatrix() {
 
 	// Multiply by transformation matrices to get global matrix for single element
 	KGlobal = KGlobal + Utils::Transpose(T) * K_NL * T;
+/*
+#ifdef PIEZO_EFFECT
+	array<array<double, elementDOFs>, elementDOFs> Kp_NL;	// Piezo Stiffness matrix (non-linear)
 
+	// Calculate the displacements
+	double ui = node[0]->pos[eX];
+	double vi = node[0]->pos[eY];
+	double thetai = node[0]->angle;
+	double uj = node[1]->pos[eX];
+	double vj = node[1]->pos[eY];
+	double thetaj = node[1]->angle;
+	double tm = (thetai+thetaj)/2;
+
+	// Calculate dB/dU
+	array<array<double, elementDOFs>, elementDOFs> dB_dU;
+	dB_dU[0][2] = dB_dU[0][5] = sin(tm)/(2*L0);
+	dB_dU[1][2] = dB_dU[1][5] = - cos(tm)/(2*L0);
+	dB_dU[2][0] = dB_dU[5][0] = sin(tm)/(2*SQ(L0));
+	dB_dU[2][1] = dB_dU[5][1] = - cos(tm)/(2*SQ(L0));
+	dB_dU[2][2] = dB_dU[2][5] = dB_dU[5][2] = dB_dU[5][5] = - ((1+(uj-ui)/L0)*cos(tm) + ((vj-vi)/L0)*sin(tm))/(4*L0);
+	dB_dU[2][3] = dB_dU[5][3] = - sin(tm)/(2*SQ(L0));
+	dB_dU[2][4] = dB_dU[5][4] = cos(tm)/(2*SQ(L0));
+	dB_dU[3][2] = dB_dU[3][5] = sin(tm)/(2*L0);
+	dB_dU[4][2] = dB_dU[4][5] = - cos(tm)/(2*L0);
+
+	// Add the piezo stiffness matrix (non linear geometric)
+	double G0 = fPtr->fpPtr->piezo_cst;
+	double V = - fPtr->fpPtr->Rohm * fPtr->fpPtr->Xdot[fPtr->fpPtr->Xdot.size()-1];
+	KGlobal = KGlobal + L0 * G0 * V * dB_dU + L0 * (-1*G0) * V * dB_dU; // The patches of each side compensate each other.
+#endif
+*/
 	// Assemble into global matrix
 	assembleGlobalMat(KGlobal, fPtr->K);
+
+#ifdef PIEZO_EFFECT
+	// Construct the coupling vector K1 and K2 (with the hyp of one patch over all the length on each side and for a single flag)
+	// Defined in the paper of O.Thomas (2009) Eq A7
+	array<double, elementDOFs> K1e;
+	array<double, elementDOFs> K2e;
+
+	// Calculate the displacements
+	double ui = node[0]->pos[eX];
+	double vi = node[0]->pos[eY];
+	double thetai = node[0]->angle;
+	double uj = node[1]->pos[eX];
+	double vj = node[1]->pos[eY];
+	double thetaj = node[1]->angle;
+	double tm = (thetai+thetaj)/2;
+/*
+	// Calculate B
+	array<array<double, elementDOFs>, 2> B;
+	B[0][0] = - cos(tm)/L0;
+	B[1][0] = - sin(tm)/L0;
+	B[2][0] = ( -(1+(uj-ui)/L0)*sin(tm) + ((vj-vi)/L0)*cos(tm) )/2;
+	B[3][0] = cos(tm)/L0;
+	B[4][0] = sin(tm)/L0;
+	B[5][0] = ( -(1+(uj-ui)/L0)*sin(tm) + ((vj-vi)/L0)*cos(tm) )/2;
+	B[0][1] = 0;
+	B[1][1] = 0;
+	B[2][1] = -1/L0;
+	B[3][1] = 0;
+	B[4][1] = 0;
+	B[5][1] = 1/L0;
+*/
+	// Calculate Blin
+	array<array<double, elementDOFs>, 2> B;
+	B[0][0] = -1/L0;
+	B[3][0] = 1/L0;
+	B[2][1] = 1/L0;
+	B[5][1] = -1/L0;
+
+	// Calculate Parameters
+	double G0 = fPtr->fpPtr->piezo_cst;
+	double G1 = fPtr->fpPtr->piezo_cst * (fPtr->fpPtr->h+fPtr->fpPtr->hp)/2;
+	array<double, 2> Gc1 = {G0, G1};
+	array<double, 2> Gc2 = {-G0, G1};
+
+	K1e = L0 * Utils::Transpose(B) * Gc1;
+	K2e = L0 * Utils::Transpose(B) * Gc2;
+
+	// Assemble into global matrix
+	assembleGlobalMat(K1e, fPtr->fpPtr->K1);
+	assembleGlobalMat(K2e, fPtr->fpPtr->K2);
+#endif
+
 }
 
 // Multiply by shape functions
