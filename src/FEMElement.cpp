@@ -91,40 +91,8 @@ void FEMElementClass::forceVector() {
 
 	// Get element internal forces
 	array<double, elementDOFs> FGlobal = Utils::Transpose(T) * F;
-
+/*
 #ifdef PIEZO_EFFECT
-	// Calculate the displacements
-	double ui = node[0]->pos[eX];
-	double vi = node[0]->pos[eY];
-	double thetai = node[0]->angle;
-	double uj = node[1]->pos[eX];
-	double vj = node[1]->pos[eY];
-	double thetaj = node[1]->angle;
-	double tm = (thetai+thetaj)/2;
-/*
-	// Calculate B
-	array<array<double, elementDOFs>, 2> B;
-	B[0][0] = - cos(tm)/L0;
-	B[1][0] = - sin(tm)/L0;
-	B[2][0] = ( -(1+(uj-ui)/L0)*sin(tm) + ((vj-vi)/L0)*cos(tm) )/2;
-	B[3][0] = cos(tm)/L0;
-	B[4][0] = sin(tm)/L0;
-	B[5][0] = ( -(1+(uj-ui)/L0)*sin(tm) + ((vj-vi)/L0)*cos(tm) )/2;
-	B[0][1] = 0;
-	B[1][1] = 0;
-	B[2][1] = -1/L0;
-	B[3][1] = 0;
-	B[4][1] = 0;
-	B[5][1] = 1/L0;
-*/
-/*
-	// Calculate Blin
-	array<array<double, elementDOFs>, 2> B;
-	B[0][0] = -1/L0;
-	B[3][0] = 1/L0;
-	B[2][1] = 1/L0;
-	B[5][1] = -1/L0;
-
 	// Calculate Parameters
 	double G0 = fPtr->fpPtr->piezo_cst;
 	double G1 = fPtr->fpPtr->piezo_cst * (fPtr->fpPtr->h+fPtr->fpPtr->hp)/2;
@@ -134,9 +102,9 @@ void FEMElementClass::forceVector() {
 	double Q = fPtr->fpPtr->Xdot[fPtr->fpPtr->Xdot.size()-1];
 
 	// Add the piezo internal forces
-	FGlobal = FGlobal + L0 * Q * Utils::Transpose(B) * Gc1 + L0 * Q * Utils::Transpose(B) * Gc2;
-*/
+	FGlobal = FGlobal + L0 * Q * B * Gc1 + L0 * Q * B * Gc2;
 #endif
+*/
 	// Assemble into global vector
 	assembleGlobalMat(FGlobal, fPtr->F);
 }
@@ -214,48 +182,15 @@ void FEMElementClass::stiffMatrix() {
 #ifdef PIEZO_EFFECT
 	// Construct the coupling vector K1 and K2 (with the hyp of one patch over all the length on each side and for a single flag)
 	// Defined in the paper of O.Thomas (2009) Eq A7
-	array<double, elementDOFs> K1e;
-	array<double, elementDOFs> K2e;
-
-	// Calculate the displacements
-	double ui = node[0]->pos[eX];
-	double vi = node[0]->pos[eY];
-	double thetai = node[0]->angle;
-	double uj = node[1]->pos[eX];
-	double vj = node[1]->pos[eY];
-	double thetaj = node[1]->angle;
-	double tm = (thetai+thetaj)/2;
-/*
-	// Calculate B
-	array<array<double, elementDOFs>, 2> B;
-	B[0][0] = - cos(tm)/L0;
-	B[1][0] = - sin(tm)/L0;
-	B[2][0] = ( -(1+(uj-ui)/L0)*sin(tm) + ((vj-vi)/L0)*cos(tm) )/2;
-	B[3][0] = cos(tm)/L0;
-	B[4][0] = sin(tm)/L0;
-	B[5][0] = ( -(1+(uj-ui)/L0)*sin(tm) + ((vj-vi)/L0)*cos(tm) )/2;
-	B[0][1] = 0;
-	B[1][1] = 0;
-	B[2][1] = -1/L0;
-	B[3][1] = 0;
-	B[4][1] = 0;
-	B[5][1] = 1/L0;
-*/
-	// Calculate Blin
-	array<array<double, elementDOFs>, 2> B;
-	B[0][0] = -1/L0;
-	B[3][0] = 1/L0;
-	B[2][1] = 1/L0;
-	B[5][1] = -1/L0;
-
+	
 	// Calculate Parameters
 	double G0 = fPtr->fpPtr->piezo_cst;
 	double G1 = fPtr->fpPtr->piezo_cst * (fPtr->fpPtr->h+fPtr->fpPtr->hp)/2;
 	array<double, 2> Gc1 = {G0, G1};
 	array<double, 2> Gc2 = {-G0, G1};
 
-	K1e = L0 * Utils::Transpose(B) * Gc1;
-	K2e = L0 * Utils::Transpose(B) * Gc2;
+	K1e = L0 * B * Gc1;
+	K2e = L0 * B * Gc2;
 
 	// Assemble into global matrix
 	assembleGlobalMat(K1e, fPtr->fpPtr->K1);
@@ -335,6 +270,8 @@ void FEMElementClass::setLocalMatrices() {
 	K_NL.fill({0.0});
 	R.fill(0.0);
 	F.fill(0.0);
+	K1e.fill(0.0);
+	K2e.fill(0.0);
 
 	// Coefficients
 	double C1 = rho * A * L0 / 420.0;
@@ -388,6 +325,41 @@ void FEMElementClass::setElementTransform() {
 	T[2][2] = T[5][5] =  1.0;
 }
 
+// Set transformation matrix for element
+void FEMElementClass::setB() {
+
+/*
+	// Calculate the displacements
+	double ui = node[0]->pos[eX];
+	double vi = node[0]->pos[eY];
+	double thetai = node[0]->angle;
+	double uj = node[1]->pos[eX];
+	double vj = node[1]->pos[eY];
+	double thetaj = node[1]->angle;
+	double tm = (thetai+thetaj)/2;
+
+	// Calculate B
+	B[0][0] = - cos(tm)/L0;
+	B[1][0] = - sin(tm)/L0;
+	B[2][0] = ( -(1+(uj-ui)/L0)*sin(tm) + ((vj-vi)/L0)*cos(tm) )/2;
+	B[3][0] = cos(tm)/L0;
+	B[4][0] = sin(tm)/L0;
+	B[5][0] = ( -(1+(uj-ui)/L0)*sin(tm) + ((vj-vi)/L0)*cos(tm) )/2;
+	B[0][1] = 0;
+	B[1][1] = 0;
+	B[2][1] = -1/L0;
+	B[3][1] = 0;
+	B[4][1] = 0;
+	B[5][1] = 1/L0;
+*/
+
+	// Calculate Blin
+	B[0][0] = -1/L0;
+	B[3][0] = 1/L0;
+	B[2][1] = 1/L0;
+	B[5][1] = -1/L0;
+}
+
 // Custom constructor for building elements
 FEMElementClass::FEMElementClass(FEMBodyClass *fBody, int i, const array<double, dims> &geom, double angleRad, double length, double den, double youngMod) {
 
@@ -424,6 +396,8 @@ FEMElementClass::FEMElementClass(FEMBodyClass *fBody, int i, const array<double,
 	// Set transformation matrix
 	T.fill({0.0});
 	setElementTransform();
+	B.fill({0.0});
+	setB();
 
 	// Set local mass and stiffness matrices
 	setLocalMatrices();

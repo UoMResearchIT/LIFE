@@ -81,6 +81,7 @@ private:
 
 	// Transformation matrix
 	array<array<double, elementDOFs>, elementDOFs> T;		// Local transformation matrix
+	array<array<double, 2>, elementDOFs> B;
 
 	// Local mass and stiffness matrices (which are constant throughout simulation)
 	array<array<double, elementDOFs>, elementDOFs> M;		// Mass matrix
@@ -88,6 +89,8 @@ private:
 	array<array<double, elementDOFs>, elementDOFs> K_NL;	// Stiffness matrix (non-linear)
 	array<double, elementDOFs> R;							// Load vector
 	array<double, elementDOFs> F;							// Vector of internal forces
+	array<double, elementDOFs> K1e;
+	array<double, elementDOFs> K2e;
 
 	// Global DOFs
 	array<int, elementDOFs> DOFs;							// Global DOFs for this element
@@ -110,7 +113,8 @@ private:
 
 	// Helper routines
 	void setLocalMatrices();																							// Set local mass and stiffness matrices
-	void setElementTransform();																							// Set the transformation matrix for the element
+	void setElementTransform();	
+	void setB();																						// Set the transformation matrix for the element
 	void assembleGlobalMat(const array<double, elementDOFs> &localVec, vector<double> &globalVec);						// Assemble into global vector
 	void assembleGlobalMat(const array<array<double, elementDOFs>, elementDOFs> &localVec, vector<double> &globalVec);	// Assemble into global matrix
 	array<double, elementDOFs> disassembleGlobalMat(const vector<double> &globalVec);									// Disassemble global vector

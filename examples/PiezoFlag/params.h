@@ -21,7 +21,7 @@ const int resFactor = 3;
 #define PIEZO_EFFECT
 
 // Outputs
-#define VTK								// Write out VTK
+//#define VTK								// Write out VTK
 //#define VTK_FEM						// Write out the FEM VTK
 #define FORCES							// Write out forces on structures
 #define TIPS							// Write out tip positions
@@ -79,8 +79,8 @@ const double omega = 1.0 / (nu_p * tStep / (pow(1.0 / sqrt(3.0), 2.0) * pow(heig
 //const double omega = 1.0 / (uLB * (Ny-1) / (uxInlet_p * height_p / (3.0 * nu_p)) + 0.5);
 
 // Number of time steps and how often to write out
-const int nSteps = static_cast<int>(round(0.1 / tStep));	// Number of timesteps
-const int tinfo = nSteps / 1000;						// Frequency to write out info and logs
+const int nSteps = 10; //static_cast<int>(round(0.1 / tStep));	// Number of timesteps
+const int tinfo = 1; //nSteps / 1000;						// Frequency to write out info and logs
 const int tVTK = nSteps / 200;						// Frequency to write out VTK
 const int tRestart = nSteps / 1;								// Frequency to write out restart files
 
