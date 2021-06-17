@@ -66,6 +66,8 @@ void FEMPiezoClass::buildGlobalMatrices() {
 	fill(Dp.begin(), Dp.end(), 0.0);
 	fill(Kp.begin(), Kp.end(), 0.0);
 	fill(Fp.begin(), Fp.end(), 0.0);
+	fill(K1.begin(), K1.end(), 0.0);
+	fill(K2.begin(), K2.end(), 0.0);
 
 	// Build global matrices Mp : Defined in the paper of O.Thomas (2009) Eq 61a
 	vector<double> Mm = fPtr->M;
@@ -84,6 +86,7 @@ void FEMPiezoClass::buildGlobalMatrices() {
 
 	// Build global matrices Kp : Defined in the paper of O.Thomas (2009) Eq 61b
 	vector<double> Km = fPtr->K;
+
 		// Build C
 	double C = dielec_cst * fPtr->L0 / hp; // Defined in the paper of O.Thomas (2009) Eq 57 and Non dimensionalised by the Width
 	
