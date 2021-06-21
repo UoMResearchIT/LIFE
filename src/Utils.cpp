@@ -146,6 +146,8 @@ string Utils::getBoundaryString(eLatType BCType) {
 		str = "Free Slip BC";
 	else if (BCType == eConvective)
 		str = "Convective BC";
+	else if (BCType == eExtrapolate)
+		str = "Extrapolate BC";
 
 	// Return
 	return str;

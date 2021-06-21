@@ -379,6 +379,13 @@ void GridClass::applyBCs(int i, int j, int id) {
 			convectiveBC(j, id);
 			break;
 
+		// Extrapolate BC
+		case eExtrapolate:
+
+			// Do extrapolate BC
+			extrapolateBC(i, j, id);
+			break;
+
 
 		// Fluid (don't do anything)
 		case eFluid:
@@ -494,6 +501,48 @@ void GridClass::convectiveSpeed() {
 	for (int j = 0; j < Ny; j++) {
 		delU[j * dims + eX] = (-uOut / 2.0) * (3.0 * u[((Nx - 1) * Ny + j) * dims + eX] - 4.0 * u[((Nx - 2) * Ny + j) * dims + eX] + u[((Nx - 3) * Ny + j) * dims + eX]);
 		delU[j * dims + eY] = (-uOut / 2.0) * (3.0 * u[((Nx - 1) * Ny + j) * dims + eY] - 4.0 * u[((Nx - 2) * Ny + j) * dims + eY] + u[((Nx - 3) * Ny + j) * dims + eY]);
+	}
+}
+
+// Extrapolate BC
+void GridClass::extrapolateBC(int i, int j, int id) {
+
+	using namespace std;
+
+	// Only apply the extrapolation on the last cell in the x direction
+	if (i == Nx-1) {
+
+		// cout << endl << endl;
+
+		// cout << "GridClass::extrapolateBC on right boundary: " <<
+		// 	"i = " << i << " j = " << j << " id = " << id << " Nx = " << Nx << " Ny = " << Ny << endl;
+
+		for (int v = 0; v < nVels; v++) {
+
+			// cout << "  v = " << v << " c[v,0] = " << c[v * dims + eX] << endl;
+
+			if (c[v * dims + eX] < 0) {
+				// The source for this population is in the positive x direction
+				// cout << "    Applying extrapolate BC" << endl;
+				int src_idx = i - c[v * dims + eX];
+				int src_idy = j - c[v * dims + eY];
+
+				// cout << "    src_idx = " << src_idx << " src_idy = " << src_idy << endl;
+
+				int extrap_src_idx = src_idx - 2;
+				int extrap_src_idy = src_idy;
+
+				// cout << "    extrap_src_idx = " << extrap_src_idx << " extrap_src_idy = " << extrap_src_idy << endl;
+
+				int extrap_src_id = ((extrap_src_idx + Nx) % Nx) * Ny + ((extrap_src_idy + Ny) % Ny);
+				// cout << "    extrap_src_id = " << extrap_src_id << endl;
+
+				f[id * nVels + v] = f_n[extrap_src_id * nVels + v];
+			}
+		}
+		// cout << endl;
+	} else {
+		ERROR("Extrapolation boundary condition only implemented for right boundary");
 	}
 }
 
@@ -923,6 +972,10 @@ void GridClass::initialiseGrid() {
 		ERROR("Currently convective BC only supported for right boundary...exiting");
 	else if (WALL_RIGHT == eConvective)
 		delU.resize(Ny * dims, 0.0);
+
+	// First check to make we don't have extrapolate BC anywhere other than RHS
+	if (WALL_LEFT == eExtrapolate || WALL_BOTTOM == eExtrapolate || WALL_TOP == eExtrapolate)
+		ERROR("Currently extrapolate BC only supported for right boundary...exiting");
 
 	// Set type matrix
 	for (int i = 0; i < Nx; i++) {

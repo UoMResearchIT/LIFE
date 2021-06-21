@@ -126,6 +126,7 @@ private:
 	void convectiveBC(int j, int id);											// Convective BC
 	void regularisedBC(int i, int j, int id,
 			array<int, dims> &normalVector, eDirectionType normalDirection);	// Regularised BC
+	void extrapolateBC(int i, int j, int id);                                          // Extrapolation BC
 
 
 	// Initialisation

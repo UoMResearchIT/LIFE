@@ -22,7 +22,6 @@ class Trace
 public:
 
 	Trace(bool enabled=false) : enabled(enabled) {
-		std::cout << "enabled = " << enabled << std::endl;
 		if (enabled && fileExists(out_filename)) {
 			// Truncate any existing file
 			std::ofstream os;
@@ -82,7 +81,6 @@ public:
 
 	bool fileExists(const std::string &filename) {
 		std::ifstream f(filename.c_str());
-		std::cout << "Trace file already exists? " << f.good() << std::endl;
 		return f.good();		
 	}
 
