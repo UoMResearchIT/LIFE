@@ -102,7 +102,7 @@ void FEMElementClass::forceVector() {
 	double Q = fPtr->fpPtr->Xdot[fPtr->fpPtr->Xdot.size()-1];
 
 	// Add the piezo internal forces
-	FGlobal = FGlobal + L0 * V * B * Gc1 + L0 * V * B * Gc2;
+	FGlobal = FGlobal + L0 * V * Utils::Transpose(T) * (B * Gc1 +  B * Gc2);
 #endif
 
 	// Assemble into global vector
@@ -145,39 +145,6 @@ void FEMElementClass::stiffMatrix() {
 
 	// Multiply by transformation matrices to get global matrix for single element
 	KGlobal = KGlobal + Utils::Transpose(T) * K_NL * T;
-/*
-#ifdef PIEZO_EFFECT
-	array<array<double, elementDOFs>, elementDOFs> Kp_NL;	// Piezo Stiffness matrix (non-linear)
-
-	// Calculate the displacements
-	double ui = node[0]->pos[eX];
-	double vi = node[0]->pos[eY];
-	double thetai = node[0]->angle;
-	double uj = node[1]->pos[eX];
-	double vj = node[1]->pos[eY];
-	double thetaj = node[1]->angle;
-	double tm = (thetai+thetaj)/2;
-
-	// Calculate dB/dU
-	array<array<double, elementDOFs>, elementDOFs> dB_dU;
-	dB_dU[0][2] = dB_dU[0][5] = sin(tm)/(2*L0);
-	dB_dU[1][2] = dB_dU[1][5] = - cos(tm)/(2*L0);
-	dB_dU[2][0] = dB_dU[5][0] = sin(tm)/(2*SQ(L0));
-	dB_dU[2][1] = dB_dU[5][1] = - cos(tm)/(2*SQ(L0));
-	dB_dU[2][2] = dB_dU[2][5] = dB_dU[5][2] = dB_dU[5][5] = - ((1+(uj-ui)/L0)*cos(tm) + ((vj-vi)/L0)*sin(tm))/(4*L0);
-	dB_dU[2][3] = dB_dU[5][3] = - sin(tm)/(2*SQ(L0));
-	dB_dU[2][4] = dB_dU[5][4] = cos(tm)/(2*SQ(L0));
-	dB_dU[3][2] = dB_dU[3][5] = sin(tm)/(2*L0);
-	dB_dU[4][2] = dB_dU[4][5] = - cos(tm)/(2*L0);
-
-	// Add the piezo stiffness matrix (non linear geometric)
-	double G0 = fPtr->fpPtr->piezo_cst;
-	double V = - fPtr->fpPtr->Rohm * fPtr->fpPtr->Xdot[fPtr->fpPtr->Xdot.size()-1];
-	KGlobal = KGlobal + L0 * G0 * V * dB_dU + L0 * (-1*G0) * V * dB_dU; // The patches of each side compensate each other.
-#endif
-*/
-	// Assemble into global matrix
-	assembleGlobalMat(KGlobal, fPtr->K);
 
 #ifdef PIEZO_EFFECT
 	// Construct the coupling vector K1 and K2 (with the hyp of one patch over all the length on each side and for a single flag)
@@ -193,10 +160,22 @@ void FEMElementClass::stiffMatrix() {
 	K2e = L0 * B * Gc2;
 
 	// Assemble into global matrix
-	assembleGlobalMat(K1e, fPtr->fpPtr->K1);
-	assembleGlobalMat(K2e, fPtr->fpPtr->K2);
+	assembleGlobalMat(Utils::Transpose(T) * K1e, fPtr->fpPtr->K1);
+	assembleGlobalMat(Utils::Transpose(T) * K2e, fPtr->fpPtr->K2);
+
+	// Calculate the part of KGlobal link to the piezo effect
+	double C = fPtr->fpPtr->dielec_cst * fPtr->L0 / fPtr->fpPtr->hp; // Defined in the paper of O.Thomas (2009) Eq 57 and Non dimensionalised by the Width
+	array<array<double, elementDOFs>, elementDOFs> KpLocal;
+	for (size_t i = 0; i < elementDOFs; i++) {
+		for (size_t j = 0; j < elementDOFs; j++) {
+			KpLocal[i][j] = (K1e[i]*K1e[j] + K2e[i]*K2e[j])/C;
+		}
+	}
+	KGlobal = KGlobal + Utils::Transpose(T) * KpLocal * T;
 #endif
 
+	// Assemble into global matrix
+	assembleGlobalMat(KGlobal, fPtr->K);
 }
 
 // Multiply by shape functions
@@ -328,7 +307,7 @@ void FEMElementClass::setElementTransform() {
 // Set transformation matrix for element
 void FEMElementClass::setB() {
 
-
+/*
 	// Calculate the displacements
 	double ui = node[0]->pos[eX];
 	double vi = node[0]->pos[eY];
@@ -351,14 +330,14 @@ void FEMElementClass::setB() {
 	B[3][1] = 0;
 	B[4][1] = 0;
 	B[5][1] = 1/L0;
+*/
 
-/*
 	// Calculate Blin
 	B[0][0] = -1/L0;
 	B[3][0] = 1/L0;
 	B[2][1] = 1/L0;
 	B[5][1] = -1/L0;
-*/
+
 }
 
 // Custom constructor for building elements
