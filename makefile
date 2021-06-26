@@ -28,11 +28,11 @@ endif
 
 OBJS:=$(LIFEOBJS) $(TESTFEMOBJS)
 # Include and library files
-INC=
-LIB=$(LAPACK_LIB) -lboost_system -lboost_filesystem
+LIB=$(LAPACK_LIB) -lboost_system -lboost_filesystem -L$(HDF5_DIR)/lib -lhdf5
 
 -include make.config
 
+INC=-I$(HDF5_DIR)/include
 # Build LIFE
 $(EXE): $(LIFEOBJS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) $(LIB)

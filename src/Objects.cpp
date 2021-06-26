@@ -24,6 +24,9 @@
 
 #include "../inc/Trace.h"
 
+#define HIGHFIVE_USE_BOOST OFF
+#include "../inc/highfive/H5Easy.hpp"
+
 using namespace LIFE;
 
 Trace trace(false);
@@ -555,6 +558,14 @@ void ObjectsClass::writeTotalForces() {
 
 		// Close file
 		output.close();
+
+		// Write forces to HDF5 file
+		H5Easy::File h5file("Results/IBM.h5", H5Easy::File::OpenOrCreate);
+		for (int d = 0; d < 2; d++) {
+			H5Easy::dump(h5file, "/total_force_nd", force[d]/ND, {d, gPtr->t});
+			H5Easy::dump(h5file, "/total_force", force[d], {d, gPtr->t});
+		}
+
 	}
 }
 
@@ -784,6 +795,8 @@ void ObjectsClass::writeYAML(bool writeIBM) {
 		if (!output.is_open())
 			ERROR("Error opening body dat file...exiting");
 
+		H5Easy::File h5file("Results/IBM.h5", H5Easy::File::OpenOrCreate);
+
 		output.precision(17);
 
 		output << gPtr->t << ":" << endl;
@@ -810,6 +823,16 @@ void ObjectsClass::writeYAML(bool writeIBM) {
 					output << "    force: [" << iBody[ib].node[n]->force[eX] << "," << iBody[ib].node[n]->force[eY] << "]" << endl;
 					output << "    ds: " << iBody[ib].node[n]->ds << endl;
 					output << "    eps: " << iBody[ib].node[n]->epsilon << endl;
+					H5Easy::dump(h5file, "/interpolated_density", iBody[ib].node[n]->interpRho, {n, gPtr->t});
+					H5Easy::dump(h5file, "/ds", iBody[ib].node[n]->ds, {n, gPtr->t});
+					H5Easy::dump(h5file, "/epsilon", iBody[ib].node[n]->epsilon, {n, gPtr->t});
+					for (int d = 0; d < 2; d++) {
+						H5Easy::dump(h5file, "/position", iBody[ib].node[n]->pos[d],   {d, n, gPtr->t});
+						H5Easy::dump(h5file, "/velocity", iBody[ib].node[n]->vel[d],   {d, n, gPtr->t});
+						H5Easy::dump(h5file, "/interpolated_velocity", iBody[ib].node[n]->interpMom[d]/iBody[ib].node[n]->interpRho,
+									 {d, n, gPtr->t});
+						H5Easy::dump(h5file, "/force",    iBody[ib].node[n]->force[d], {d, n, gPtr->t});
+					}
 				}
 			}
 		}
