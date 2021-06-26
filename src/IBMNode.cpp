@@ -203,6 +203,10 @@ void IBMNodeClass::computeDs() {
 
 	// Set ds value
 	ds = currentDs;
+
+	#ifdef FIXED_DS
+	ds = 1;
+	#endif
 }
 
 // Custom constructor for building node
