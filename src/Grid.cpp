@@ -23,6 +23,9 @@
 #include "../inc/Utils.h"
 #include "../inc/GridUtils.h"
 
+#define HIGHFIVE_USE_BOOST OFF
+#include "../inc/highfive/H5Easy.hpp"
+
 using namespace LIFE;
 
 // Main solver
@@ -675,6 +678,13 @@ void GridClass::writeInfo() {
 		of << t*Dt << "\t" << oPtr->subIt << "\t" << oPtr->subRes << endl;
 		of.close();
 	}
+
+	H5Easy::File h5file("Results/IBM.h5", H5Easy::File::OpenOrCreate);
+	H5Easy::dump(h5file, "/subiteration_residual",
+				 oPtr->subRes, {t});
+	H5Easy::dump(h5file, "/subiterations", oPtr->subIt, {t});
+
+
 }
 
 // Write log data at start

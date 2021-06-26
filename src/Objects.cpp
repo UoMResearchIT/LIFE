@@ -834,6 +834,12 @@ void ObjectsClass::writeYAML(bool writeIBM) {
 						H5Easy::dump(h5file, "/force",    iBody[ib].node[n]->force[d], {d, n, gPtr->t});
 					}
 				}
+
+				H5Easy::dump(h5file, "/fem_nr_residual",
+							 iBody[ib].sBody->resNR, {gPtr->t});
+				H5Easy::dump(h5file, "/fem_nr_iterations",
+							 iBody[ib].sBody->itNR, {gPtr->t});
+
 			}
 		}
 
