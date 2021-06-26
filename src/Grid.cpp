@@ -17,6 +17,7 @@
 */
 
 // Includes
+#include <sstream>
 #include "../inc/Grid.h"
 #include "../inc/Objects.h"
 #include "../inc/Utils.h"
@@ -665,6 +666,15 @@ void GridClass::writeInfo() {
 	cout << setprecision(5) << "Max Velocity = " << maxVel << endl;
 	cout << setprecision(5) << "Max Velocity (m/s) = " << maxVel * Dx / Dt << endl;
 	cout << setprecision(5) << "Max Reynolds number = " << maxRe;
+
+	{
+		stringstream ss;
+		ss << "Results" << "/subits.dat";
+		ofstream   of(ss.str(), ofstream::app);
+		of << setprecision(19);
+		of << t*Dt << "\t" << oPtr->subIt << "\t" << oPtr->subRes << endl;
+		of.close();
+	}
 }
 
 // Write log data at start
