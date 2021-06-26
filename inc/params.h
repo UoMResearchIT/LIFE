@@ -36,6 +36,8 @@ const int resFactor = 2;
 #define ORDERED						// For deterministic reduction operations
 //#define INITIAL_DEFLECT 0.01		// Set an initial deflection (fraction of L)
 
+//#define EPSILON_IS_2                  // Hardcode epsilon to 2 instead of calculating it
+
 // Outputs
 #define VTK								// Write out VTK
 //#define VTK_FEM						// Write out the FEM VTK

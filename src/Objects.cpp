@@ -318,8 +318,12 @@ void ObjectsClass::computeEpsilon() {
 			// Set RHS
 			vector<double> b(dim, 1.0);
 
+#ifndef EPSILON_IS_2
 			// Solve system
 			vector<double> epsilon = Utils::solveLAPACK(A, b);
+#else
+			vector<double> epsilon(dim, 2.0);
+#endif
 
 			// Set to node values
 			for (size_t i = 0; i < dim; i++)
