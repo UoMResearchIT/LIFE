@@ -183,6 +183,10 @@ double IBMBodyClass::epsilon(int nodeID)
 
 array<double, dims> IBMBodyClass::force(int nodeID)
 {
+#ifdef NO_FORCE_ON_STRUCTURE
+	return array<double, dims>{0,0};
+#else
 	return node[nodeID]->force;
+#endif
 }
 
