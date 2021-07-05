@@ -37,6 +37,7 @@ const int resFactor = 2;
 //#define INITIAL_DEFLECT 0.01		// Set an initial deflection (fraction of L)
 
 //#define EPSILON_IS_2                  // Hardcode epsilon to 2 instead of calculating it
+//#define FIX_SUBITERATIONS 2         // Run a fixed number of subiterations
 
 // Outputs
 #define VTK								// Write out VTK

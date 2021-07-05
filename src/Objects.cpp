@@ -31,6 +31,16 @@ using namespace LIFE;
 
 Trace trace(false);
 
+bool subiterationsComplete(double subRes, double subTol, int subIt) {
+
+#ifdef FIX_SUBITERATIONS
+	return subIt >= FIX_SUBITERATIONS;
+#else
+	return subRes <= subTol;
+#endif
+}
+
+
 // Main kernel for objects
 void ObjectsClass::objectKernel() {
 
@@ -66,7 +76,7 @@ void ObjectsClass::objectKernel() {
 		break; // Only run a single subiteration
 #endif
 
-	} while (subIt < MAXIT && subRes > subTol);
+	} while (subIt < MAXIT && !subiterationsComplete(subRes,subTol,subIt));
 
 	// Do IBM spreading step
 	ibmKernelSpread();
